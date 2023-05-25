@@ -92,8 +92,8 @@ The development of the Tena web application will be divided into the following p
 
 ### 7. Conclusion
 The Tena web application aims to provide patients with a seamless and user-friendly experience for making payments, scheduling appointments, and communicating with doctors online. By utilizing Node.js with Express.js and MongoDB, the application will deliver a reliable and scalable solution. This project proposal outlines the objectives, features, technology stack, and project timeline for the development of the Tena web application.
-
-#### Team DevSquad
+##
+## Team DevSquad
 ## Project title : Tena app
 ## Github repo : https://github.com/Haileiyesus-29/Tena
 ## Proposal : https://github.com/Haileiyesus-29/Tena/edit/main/README.md
