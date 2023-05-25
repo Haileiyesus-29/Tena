@@ -95,10 +95,11 @@ The Tena web application aims to provide patients with a seamless and user-frien
 ##
 ## Team DevSquad
 ## Project title : Tena app
-## Github repo : https://github.com/Haileiyesus-29/Tena
-## Proposal : https://github.com/Haileiyesus-29/Tena/edit/main/README.md
+## Github repo : [Tena Web app](https://github.com/Haileiyesus-29/Tena)
+## Proposal : [Tena web app proposal](https://docs.google.com/document/d/1bqoWrukGuvM0X_hEwbU3pX9ZKR1A3BHFoe3IdNfoQqg/edit?usp=sharing)
+## Jira link: [Tean web app jira link](https://e-healthcare-app.atlassian.net/)
 ## Team members
- - Haileiyesus Mesafint
- - Betelihem Gebeyehu
- - Edilawit G
+ - [Haileiyesus Mesafint](https://github.com/Haileiyesus-29)
+ - [Betelihem Gebeyehu](https://github.com/Bethelhemm)
+ - [Edilawit G](https://github.com/EdlawitG)
  
