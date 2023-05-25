@@ -1,67 +1,97 @@
-## Tena Web Application Requirement Document
+## Project Proposal: Tena Web Application
 
 ### 1. Introduction
-The purpose of this requirement document is to outline the features and functionality of the web application "Tena," which is a platform designed to facilitate online healthcare services. Tena aims to provide patients with a convenient and efficient way to make payments, schedule appointments, and communicate with doctors.
+The purpose of this project proposal is to outline the development of the Tena web application, a platform designed to provide convenient and efficient healthcare services to patients. Tena allows patients to make online payments for hospital registration, schedule appointments with doctors, and communicate with them online. The application will be built using Node.js with the Express.js framework and MongoDB as the database.
 
-### 2. Scope
-The scope of the Tena web application includes the following key features:
-- Online payment for hospital registration.
-- Appointment scheduling with doctors.
-- Online communication between patients and doctors.
+### 2. Objectives
+The main objectives of the Tena web application are as follows:
+- Provide a user-friendly platform for patients to make online payments for hospital registration.
+- Enable patients to schedule appointments with doctors based on their availability.
+- Facilitate secure online communication between patients and doctors.
 
-### 3. User Roles
-The Tena web application will have the following user roles:
-1. Patient: Users seeking medical services.
-2. Doctor: Registered medical professionals.
+### 3. Features and Functionality
+The Tena web application will include the following key features:
 
-### 4. Functional Requirements
+#### 3.1 Registration and Authentication
+- Users will be able to create an account by providing their personal information, including name, contact details, and email address.
+- The system will validate user emails during registration.
+- Users will log in to their accounts using their registered email and password.
+- Authentication will be implemented securely to protect user privacy.
 
-#### 4.1 Registration and Authentication
-1. Users should be able to create a new account by providing their personal information, including name, contact details, and email address.
-2. The system should validate the user's email address during registration.
-3. Users should be able to log in to their accounts using their registered email and password.
-4. Authentication should be secure and protect user privacy.
+#### 3.2 Hospital Registration Payment
+- Patients will have the option to view the registration fee for the hospital.
+- Patients will be able to securely make the registration payment online using Telebirr or other secure payment methods
+- The system will generate a payment receipt for the patient and send it via email.
 
-#### 4.2 Hospital Registration Payment
-1. Patients should be able to view the registration fee for the hospital.
-2. Patients should be able to make the registration payment securely online using various payment methods, such as credit/debit cards or mobile wallets.
-3. The system should generate a payment receipt for the patient and send it via email.
+#### 3.3 Appointment Scheduling
+- Patients will be able to view a list of available doctors, including their specialties and available time slots.
+- Patients can select their preferred doctor and schedule an appointment based on the doctor's availability.
+- The system will prevent double booking by ensuring only available time slots can be selected.
+- Patients will receive a confirmation email containing the appointment details.
 
-#### 4.3 Appointment Scheduling
-1. Patients should be able to view a list of available doctors along with their specialties and available time slots.
-2. Patients should be able to select a preferred doctor and schedule an appointment based on the doctor's availability.
-3. The system should prevent double booking by ensuring that only available time slots can be selected.
-4. Patients should receive a confirmation email with the appointment details.
+#### 3.4 Online Communication
+- Patients will have the ability to send messages to their assigned doctors, seeking medical advice or clarification.
+- Doctors will be able to view and respond to patient messages in a secure and timely manner.
+- Communication between patients and doctors will be confidential and secure.
+- The system will provide notifications to users when they receive new messages.
 
-#### 4.4 Online Communication
-1. Patients should be able to send messages to their assigned doctors, seeking medical advice or clarifications.
-2. Doctors should be able to view and respond to patient messages in a secure and timely manner.
-3. The communication should be secure and protect patient confidentiality.
-4. The system should provide notifications to users when they receive new messages.
+### 4. Technology Stack
+The following technologies will be utilized in the development of the Tena web application:
+- Programming Languages: JavaScript
+- Framework: Express.js (Node.js web framework)
+- Database: MongoDB
+- Payment Gateway Integration: Stripe, PayPal, or equivalent
+- Real-time Communication: WebSocket or equivalent
 
 ### 5. Non-Functional Requirements
+In addition to the functional requirements, the Tena web application will adhere to the following non-functional requirements:
 
 #### 5.1 Usability
-1. The web application should have an intuitive and user-friendly interface.
-2. The application should be accessible across various devices and screen sizes.
-3. The design should prioritize readability and ease of navigation.
+- The web application will have an intuitive and user-friendly interface.
+- The application will be responsive and accessible across various devices and screen sizes.
+- Design elements will prioritize readability and ease of navigation.
 
 #### 5.2 Security
-1. The application should implement appropriate security measures, including secure data storage, encryption, and protection against common vulnerabilities.
-2. User authentication and authorization should be implemented securely.
-3. Patient-doctor communication should be confidential and secure.
+- The application will implement appropriate security measures, including secure data storage, encryption, and protection against common vulnerabilities.
+- User authentication and authorization will be implemented securely.
+- Patient-doctor communication will be confidential and secure.
 
 #### 5.3 Performance
-1. The application should be responsive and provide a smooth user experience.
-2. The system should handle a reasonable number of concurrent users without significant performance degradation.
-3. Load times should be minimized, especially for critical functionalities like payment processing and message delivery.
+- The application will deliver a smooth user experience with responsive functionality.
+- The system will be capable of handling a reasonable number of concurrent users without significant performance degradation.
+- Load times will be minimized, especially for critical functionalities like payment processing and message delivery.
 
-### 6. Technology Stack
-The following technologies are suggested for the development of the Tena web application:
-- Programming Languages: HTML, CSS, JavaScript, Node.js
-- Frameworks: Express.js (Node.js web framework), React (JavaScript library)
-- Database: MongoDB
-- Payment Gateway Integration: Telebirr
-- Communication: WebSocket or real-time messaging system
+### 6. Project Timeline
+The development of the Tena web application will be divided into the following phases:
 
-This requirement document serves as a starting point for the development of the Tena web application. It should be updated and expanded upon as the project progresses to ensure all stakeholders are aligned on the desired features and functionality.
+1. Requirements Gathering and Analysis:
+ 2. Design and Architecture:
+   - Design the user interface and system architecture.
+   - Select appropriate libraries, frameworks, and tools.
+
+3. Front-end and Back-end Development:
+   - Implement the front-end using React.js library.
+   - Develop the server-side logic using Node.js and Express.js.
+   - Integrate the MongoDB database for data storage.
+
+4. Payment Gateway Integration:
+   - Integrate a payment gateway system such as Telebrirr or other secure online payments.
+
+5. Appointment Scheduling and Communication:
+   - Implement the appointment scheduling feature, ensuring availability and preventing double booking.
+   - Develop the secure messaging functionality for patient-doctor communication.
+
+6. Testing and Quality Assurance:
+   - Conduct thorough testing of the application's functionality, performance, and security.
+   - Address any identified issues or bugs.
+
+7. Deployment and Launch:
+   - Deploy the application to a production environment.
+   - Conduct final testing and quality assurance checks.
+   - Launch the Tena web application to the public.
+
+### 7. Conclusion
+The Tena web application aims to provide patients with a seamless and user-friendly experience for making payments, scheduling appointments, and communicating with doctors online. By utilizing Node.js with Express.js and MongoDB, the application will deliver a reliable and scalable solution. This project proposal outlines the objectives, features, technology stack, and project timeline for the development of the Tena web application.
+
+
+
