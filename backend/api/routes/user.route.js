@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const validateUserCreatingForm = require('../validations/validateUserCreatingForm')
 const verifyUserLogin = require('../middlewares/verifyUserLogin')
-const authenticateUser = require('../middlewares/authenticateUser')
+const authenticate = require('../middlewares/authenticate')
 const {
    createUser,
    getUser,
@@ -25,9 +25,9 @@ router.post('/login', verifyUserLogin, loginUser)
 router.get('/:userId', getUser)
 
 // Update user information
-router.put('/:userId', authenticateUser, updateUser)
+router.put('/me', authenticate, updateUser)
 
 // Delete a user
-router.delete('/:userId', authenticateUser, deleteUser)
+router.delete('/me', authenticate, deleteUser)
 
 module.exports = router

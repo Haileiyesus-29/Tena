@@ -15,6 +15,10 @@ const hospitalSchema = new mongoose.Schema(
          match: /^\S+@\S+\.\S+$/,
          trim: true,
       },
+      password: {
+         type: String,
+         required: true,
+      },
       address: {
          type: String,
          required: true,

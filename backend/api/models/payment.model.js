@@ -22,7 +22,7 @@ const paymentSchema = new mongoose.Schema(
       },
       payment_timestamp: {
          type: Date,
-         default: Date.now,
+         default: () => Date.now(),
       },
    },
    { versionKey: false }

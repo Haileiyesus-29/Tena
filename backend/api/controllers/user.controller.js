@@ -24,7 +24,7 @@ async function createUser(req, res, next) {
          password: hashedPassword,
       })
       await user.save()
-      const token = await generateToken({ id: user._id })
+      const token = await generateToken({ id: user._id, acc: 'user' })
       res.status(201).json({ message: 'User created successfully', token })
    } catch (error) {
       next(error)
@@ -53,29 +53,22 @@ async function getUser(req, res, next) {
 // Login user
 async function loginUser(req, res, next) {
    const { _id: id } = req.user
-   const token = await generateToken({ id })
+   const token = await generateToken({ id, acc: 'user' })
    res.json({ message: 'successfullly logged in', token })
 }
 
 // Update user information
 async function updateUser(req, res, next) {
    try {
-      const userId = req.params.userId
       const loggedUserId = req.user._id
       req.body.email = undefined
       const updates = req.body
 
-      if (userId !== loggedUserId?.toString()) return next('Forbidden')
-      const updatedUser = await User.findByIdAndUpdate(userId, updates, {
+      const updatedUser = await User.findByIdAndUpdate(loggedUserId, updates, {
          new: true,
       }).select('-password')
-
-      if (!updatedUser) {
-         const error = new Error('User not found')
-         error.statusCode = 404
-         throw error
-      }
-
+      if (!updatedUser)
+         return next({ message: 'Internal server Error', status: 500 })
       res.json({ message: 'User updated successfully', user: updatedUser })
    } catch (error) {
       next(error)
@@ -85,21 +78,14 @@ async function updateUser(req, res, next) {
 // Delete a user
 async function deleteUser(req, res, next) {
    try {
-      const userId = req.params.userId
       const loggedUserId = req.user._id
 
-      if (userId !== loggedUserId?.toString()) return next('Forbidden')
-      const deletedUser = await User.findByIdAndDelete(userId).select(
+      const deletedUser = await User.findByIdAndDelete(loggedUserId).select(
          '-password'
       )
-
-      if (!deletedUser) {
-         const error = new Error('User not found')
-         error.statusCode = 404
-         throw error
-      }
-
-      res.json({ message: 'User deleted successfully' })
+      if (!deletedUser)
+         return next({ message: 'Internal server Error', status: 500 })
+      res.status(204).json({ message: 'User deleted successfully' })
    } catch (error) {
       next(error)
    }

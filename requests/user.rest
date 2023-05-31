@@ -11,9 +11,9 @@ POST http://localhost:5000/api/users
 Content-Type: application/json
 
 {
-   "email":"smith1234@email.com",
    "name": "smithth",
-   "password": "Pa$$w0rd"
+   "email":"john@email.com",
+   "password": "P@ssw0rd"
 }
 
 ### LOGIN USER
@@ -21,14 +21,14 @@ POST http://localhost:5000/api/users/login
 Content-Type: application/json
 
 {
-   "email":"smith1234@email.com",
-   "password": "Pa$$w0rd"
+  "email":"smith123@email.com",
+   "password": "P@ssw0rd"
 }
 
 ### UPADATE USER
-PUT http://localhost:5000/api/users/6472fd9341f9639cd61eb018
+PUT http://localhost:5000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzM1MGU1OWJhMGI4NGYyMThmNTE0NSIsImlhdCI6MTY4NTM2ODU4N30.QIUDgBcHPwY3jgagNQ--Onp_ZUewhYpov0NhV1CqW8k
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Nzc0MTFmNzZkZTAwNzFlNDkzMTk2NSIsImlhdCI6MTY4NTUzNzA1NX0.1thwInbvxPIwN80W_mA0uX17b0esaE7DBDt_Kv5WX5M
 
 {
    "name":"smith-updated",
@@ -36,6 +36,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzM1MGU1O
 }
 
 ### DELETE USER
-DELETE http://localhost:5000/api/users/64730dff46925366ded8f853
+DELETE http://localhost:5000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzMwZGZmNDY5MjUzNjZkZWQ4Zjg1MyIsImlhdCI6MTY4NTI3OTI0N30.092dpezHP-_ZM-u1xJyGtZXenOD9cU_Dbcgu1DzP3Ak
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzcyZTIxZWU0ZmViZmQyOGY3ZDNkNCIsImlhdCI6MTY4NTUzMjE5M30.EwCpsH9Kg8L4R-X4FEKto-XCyLJk6qPcGVN4tNYHgrI

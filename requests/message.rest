@@ -1,0 +1,20 @@
+POST http://localhost:5000/api/messages/6477a91246346c065264c8bb
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Nzc0MTFmNzZkZTAwNzFlNDkzMTk2NSIsImFjYyI6InVzZXIiLCJpYXQiOjE2ODU1NjA4NzJ9.qpVaUpBgcuyeaXqFxAiOKhw9T3YaXcd-OW6Jowrx9pw
+
+{
+   "content":"special message"
+}
+
+### 
+POST http://localhost:5000/api/messages/6477411f76de0071e4931965
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzdhOTEyNDYzNDZjMDY1MjY0YzhiYiIsImFjYyI6InVzZXIiLCJpYXQiOjE2ODU1NjM2NjZ9.xGco0dpBLhLift7P_xo_Nd8ugBoUD--tgbxnF5bqcZo
+
+{
+   "content":"very new message"
+}
+
+### GET MESSAGE THREAD USER PARTICIPATED
+GET http://localhost:5000/api/messages/6477411f76de0071e4931965
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzdhOTEyNDYzNDZjMDY1MjY0YzhiYiIsImFjYyI6InVzZXIiLCJpYXQiOjE2ODU1NjM2NjZ9.xGco0dpBLhLift7P_xo_Nd8ugBoUD--tgbxnF5bqcZo

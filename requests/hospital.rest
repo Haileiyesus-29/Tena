@@ -15,7 +15,7 @@ Content-Type: application/json
 {
    "contactNumber": "251987654321",
    "name": "Yekatit 5",
-   "email": "validemail@gmail.com",
+   "email": "newhospital12@gmail.com",
    "address": "6 killo"
 }
 
