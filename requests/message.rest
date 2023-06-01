@@ -7,14 +7,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Nzc0MTFmN
 }
 
 ### 
-POST http://localhost:5000/api/messages/6477411f76de0071e4931965
+POST http://localhost:5000/api/messages/6477410c76de0071e4931961
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzdhOTEyNDYzNDZjMDY1MjY0YzhiYiIsImFjYyI6InVzZXIiLCJpYXQiOjE2ODU1NjM2NjZ9.xGco0dpBLhLift7P_xo_Nd8ugBoUD--tgbxnF5bqcZo
 
 {
-   "content":"very new message"
+   "content":"invalid message"
 }
 
-### GET MESSAGE THREAD USER PARTICIPATED
-GET http://localhost:5000/api/messages/6477411f76de0071e4931965
+### GET ALL MESSAGES MADE ACCOUNTS
+GET http://localhost:5000/api/messages
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzdhOTEyNDYzNDZjMDY1MjY0YzhiYiIsImFjYyI6InVzZXIiLCJpYXQiOjE2ODU1NjM2NjZ9.xGco0dpBLhLift7P_xo_Nd8ugBoUD--tgbxnF5bqcZo
+
+
+### GET MESSAGE HISTORY MADE WITH AN ACCOUNT
+GET http://localhost:5000/api/messages/6477410c76de0071e4931961
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzdhOTEyNDYzNDZjMDY1MjY0YzhiYiIsImFjYyI6InVzZXIiLCJpYXQiOjE2ODU1NjM2NjZ9.xGco0dpBLhLift7P_xo_Nd8ugBoUD--tgbxnF5bqcZo
+
