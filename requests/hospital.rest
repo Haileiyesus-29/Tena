@@ -1,0 +1,32 @@
+### GET ALL HOSPTALS
+GET http://127.0.0.1:5000/api/hospitals
+
+
+
+### GET HOSPITAL BY ID
+GET http://127.0.0.1:5000/api/hospitals/6475f7d092c796a98e10cbe1
+
+
+
+### CREATE NEW HOSPITAL
+POST http://127.0.0.1:5000/api/hospitals
+Content-Type: application/json
+
+{
+   "contactNumber": "251987654321",
+   "name": "Yekatit 5",
+   "email": "newhospital12@gmail.com",
+   "address": "6 killo"
+}
+
+
+### UPDATE A HOSPITAL
+PUT http://127.0.0.1:5000/api/hospitals/6475f7d092c796a98e10cbe1
+Content-Type: application/json
+
+{
+   "contactNumber": "251987654321",
+   "name": "Yekatit 55",
+   "email": "validemail@gmail.com",
+   "address": "6 killo"
+}

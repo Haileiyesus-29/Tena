@@ -9,8 +9,6 @@ const PORT = process.env.SERVER_PORT || 5000
 
 app.use(express.json())
 
-app.get('/', (req, res) => res.send('server working'))
-
 const userRoutes = require('./api/routes/user.route')
 const hospitalRoutes = require('./api/routes/hospital.route')
 const doctorRoutes = require('./api/routes/doctor.route')
