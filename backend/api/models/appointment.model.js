@@ -25,6 +25,10 @@ const appointmentSchema = new mongoose.Schema(
          type: String,
          required: true,
       },
+      payment: {
+         type:Boolean,
+         default: false,
+      },
    },
    { versionKey: false }
 )
