@@ -33,6 +33,7 @@ async function createHospital(req, res, next) {
       const hospital = await Hospital.create({
          name,
          email,
+         password,
          address,
          contactNumber,
       })
@@ -45,11 +46,11 @@ async function createHospital(req, res, next) {
 // Update a hospital by ID
 async function updateHospitalById(req, res, next) {
    const { id } = req.params
-   const { name, email, address, contactNumber } = req.body
+   const { name, email, password, address, contactNumber } = req.body
    try {
       const hospital = await Hospital.findByIdAndUpdate(
          id,
-         { name, email, address, contactNumber },
+         { name, email, password, address, contactNumber },
          { new: true }
       )
       if (!hospital) {
