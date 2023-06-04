@@ -12,28 +12,30 @@ Content-Type: application/json
 
 {
    "name": "smithth",
-   "email":"john@email.com",
+   "email":"john99@email.com",
    "password": "P@ssw0rd"
 }
 
 ### LOGIN USER
-POST http://localhost:5000/api/users/login
+POST http://localhost:5000/api/login
 Content-Type: application/json
 
 {
-  "email":"smith123@email.com",
-   "password": "P@ssw0rd"
+   "email":"john99@email.com",
+   "passwordd": "P@ssw0rd",
+   "password": "password"
 }
 
 ### UPADATE USER
 PUT http://localhost:5000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0Nzc0MTFmNzZkZTAwNzFlNDkzMTk2NSIsImlhdCI6MTY4NTUzNzA1NX0.1thwInbvxPIwN80W_mA0uX17b0esaE7DBDt_Kv5WX5M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2NjMmU0ZTY2NGYyNjM4ZjMwMzQ3OSIsImFjY291bnRUeXBlIjoidXNlciIsImlhdCI6MTY4NTg5Nzk1Nn0.-pD4IxGBqP1wpRq_D1H3cSaOJcmVZOdMDohsTX_Qmas
 
 {
-   "name":"smith-updated",
-   "email": "email-updated@email.com"
+   "name":"samsmith",
+   "password": "P@ssw0rd"
 }
+
 
 ### DELETE USER
 DELETE http://localhost:5000/api/users/me

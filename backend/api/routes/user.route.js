@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const validateUserCreatingForm = require('../validations/validateUserCreatingForm')
-const verifyUserLogin = require('../middlewares/verifyUserLogin')
+const validateForm = require('../validations/validateForm')
+const validateAccount = require('../validations/validateAccount')
 const authenticate = require('../middlewares/authenticate')
 const {
    createUser,
@@ -9,17 +9,13 @@ const {
    updateUser,
    deleteUser,
    getAllUsers,
-   loginUser,
 } = require('../controllers/user.controller')
 
 // Get all users
 router.get('/', getAllUsers)
 
 // Create a new user
-router.post('/', validateUserCreatingForm, createUser)
-
-// Login user
-router.post('/login', verifyUserLogin, loginUser)
+router.post('/', validateForm, createUser)
 
 // Get user details
 router.get('/:userId', getUser)

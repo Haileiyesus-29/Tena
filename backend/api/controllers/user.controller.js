@@ -1,6 +1,8 @@
 const User = require('../models/user.model')
-const hashPassword = require('../helpers/hashUserPassword')
+const hashPassword = require('../helpers/hashPassword')
 const generateToken = require('../helpers/generateToken')
+const passwordValidator = require('../helpers/passwordValidator')
+const nameValidator = require('../helpers/nameValidator')
 
 // Get all users
 async function getAllUsers(req, res, next) {
@@ -24,7 +26,7 @@ async function createUser(req, res, next) {
          password: hashedPassword,
       })
       await user.save()
-      const token = await generateToken({ id: user._id, acc: 'user' })
+      const token = await generateToken({ id: user._id, accountType: 'user' })
       res.status(201).json({ message: 'User created successfully', token })
    } catch (error) {
       next(error)
@@ -50,21 +52,28 @@ async function getUser(req, res, next) {
    }
 }
 
-// Login user
-async function loginUser(req, res, next) {
-   const { _id: id } = req.user
-   const token = await generateToken({ id, acc: 'user' })
-   res.json({ message: 'successfullly logged in', token })
-}
-
 // Update user information
 async function updateUser(req, res, next) {
    try {
-      const loggedUserId = req.user._id
-      req.body.email = undefined
-      const updates = req.body
+      const { name, password } = req.body
+      const update = {}
+      let nameErrors = []
+      let passwordErrors = []
 
-      const updatedUser = await User.findByIdAndUpdate(loggedUserId, updates, {
+      if (password) {
+         passwordErrors = passwordValidator(password)
+         update.password = await hashPassword(password)
+      }
+      if (name) {
+         nameErrors = nameValidator(name)
+         update.name = name
+      }
+
+      const errors = [...nameErrors, ...passwordErrors]
+      if (errors.length > 0)
+         return next({ errors, message: 'Bad Request', status: 400 })
+
+      const updatedUser = await User.findByIdAndUpdate(req.userId, update, {
          new: true,
       }).select('-password')
       if (!updatedUser)
@@ -78,9 +87,7 @@ async function updateUser(req, res, next) {
 // Delete a user
 async function deleteUser(req, res, next) {
    try {
-      const loggedUserId = req.user._id
-
-      const deletedUser = await User.findByIdAndDelete(loggedUserId).select(
+      const deletedUser = await User.findByIdAndDelete(req.userId).select(
          '-password'
       )
       if (!deletedUser)
@@ -97,5 +104,4 @@ module.exports = {
    getUser,
    updateUser,
    deleteUser,
-   loginUser,
 }

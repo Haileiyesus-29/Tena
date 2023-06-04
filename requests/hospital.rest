@@ -4,7 +4,7 @@ GET http://127.0.0.1:5000/api/hospitals
 
 
 ### GET HOSPITAL BY ID
-GET http://127.0.0.1:5000/api/hospitals/6475f7d092c796a98e10cbe1
+GET http://127.0.0.1:5000/api/hospitals/647c9ff57954b2021f3e90b3
 
 
 
@@ -14,19 +14,29 @@ Content-Type: application/json
 
 {
    "contactNumber": "251987654321",
-   "name": "Yekatit 5",
-   "email": "newhospital12@gmail.com",
-   "address": "6 killo"
+   "name": "Menelik Hospital",
+   "email": "menilik@gmail.com",
+   "address": "6 killo",
+   "password": "Pa$$w0rd"
 }
 
 
 ### UPDATE A HOSPITAL
-PUT http://127.0.0.1:5000/api/hospitals/6475f7d092c796a98e10cbe1
+PUT http://127.0.0.1:5000/api/hospitals/me
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2NhMWRjODJhOTIwYWE1NGY4MmU1NyIsImFjY291bnRUeXBlIjoiaG9zcGl0YWwiLCJpYXQiOjE2ODU5MDU1MjF9.y--E9KAcs0KMCARD6cDdm_4jAZYDVLERBsZqzQj6uUM
 
 {
    "contactNumber": "251987654321",
-   "name": "Yekatit 55",
-   "email": "validemail@gmail.com",
-   "address": "6 killo"
+   "name": "Yekatit",
+   "address": "4 killo"
+}
+
+### LOGIN HOSPITAL ACCOUNT
+POST http://127.0.0.1:5000/api/login
+Content-Type: application/json
+
+{
+   "email": "menilik@gmail.com",
+   "password": "Pa$$w0rd"
 }

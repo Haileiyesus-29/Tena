@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const authenticate = require('../middlewares/authenticate')
-const validateMessageReceiver = require('../middlewares/validateMessage')
+const validateMessageReceiver = require('../validations/validateMessage')
 
 const {
    getAllMessages,

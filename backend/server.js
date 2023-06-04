@@ -15,6 +15,7 @@ const doctorRoutes = require('./api/routes/doctor.route')
 const appointmentRoutes = require('./api/routes/appointment.route')
 const paymentRoutes = require('./api/routes/payment.route')
 const messageRoutes = require('./api/routes/message.route')
+const loginRoute = require('./api/routes/login.route')
 
 app.use('/api/users', userRoutes)
 app.use('/api/hospitals', hospitalRoutes)
@@ -22,6 +23,7 @@ app.use('/api/doctors', doctorRoutes)
 app.use('/api/appointments', appointmentRoutes)
 app.use('/api/payments', paymentRoutes)
 app.use('/api/messages', messageRoutes)
+app.use('/api/login', loginRoute)
 
 app.use(errorHandler)
 
