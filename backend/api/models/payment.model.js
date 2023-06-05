@@ -2,25 +2,25 @@ const mongoose = require('mongoose')
 
 const paymentSchema = new mongoose.Schema(
    {
-      patient_id: {
+      user: {
          type: mongoose.Schema.Types.ObjectId,
          ref: 'User',
          required: true,
       },
-      hospital_id: {
+      hospital: {
          type: mongoose.Schema.Types.ObjectId,
          ref: 'Hospital',
          required: true,
       },
-      payment_amount: {
+      amount: {
          type: Number,
          required: true,
       },
-      payment_method: {
+      method: {
          type: String,
-         required: true,
+         default: 'telebirr',
       },
-      payment_timestamp: {
+      timestamp: {
          type: Date,
          default: () => Date.now(),
       },

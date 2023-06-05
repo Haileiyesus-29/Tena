@@ -4,7 +4,7 @@ GET http://127.0.0.1:5000/api/hospitals
 
 
 ### GET HOSPITAL BY ID
-GET http://127.0.0.1:5000/api/hospitals/647c9ff57954b2021f3e90b3
+GET http://127.0.0.1:5000/api/hospitals/647ce410353f917f5659f854
 
 
 
@@ -29,7 +29,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2NhMWRjO
 {
    "contactNumber": "251987654321",
    "name": "Yekatit",
-   "address": "4 killo"
+   "address": "4 killo",
+   "password": "Pa$$w0rd"
 }
 
 ### LOGIN HOSPITAL ACCOUNT

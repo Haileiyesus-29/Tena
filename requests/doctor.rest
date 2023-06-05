@@ -1,0 +1,15 @@
+GET http://127.0.0.1:5000/api/doctors
+
+
+
+###
+POST http://127.0.0.1:5000/api/doctors
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2NlNDEwMzUzZjkxN2Y1NjU5Zjg1NCIsImFjY291bnRUeXBlIjoiaG9zcGl0YWwiLCJpYXQiOjE2ODU5MDg3Nzd9.3xxaV-d6HQV-wEzfRbclxQ-sj_a18CesKOQ3ZEzMytM
+
+{
+   "specialty": "Neuron",
+   "name": "John",
+   "email": "doctor@email.com",
+   "password": "Pa$$w0rd"
+}

@@ -22,8 +22,7 @@ Content-Type: application/json
 
 {
    "email":"john99@email.com",
-   "passwordd": "P@ssw0rd",
-   "password": "password"
+   "password": "P@ssw0rd"
 }
 
 ### UPADATE USER

@@ -19,6 +19,7 @@ async function authenticate(req, res, next) {
 
       if (!decoded.id) return next('Invalid token provided')
       req.userId = decoded.id
+      req.accountType = decoded?.accountType
       next()
    } catch (err) {
       return next('Invalid token')

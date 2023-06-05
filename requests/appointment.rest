@@ -1,0 +1,33 @@
+### GET APPOINTMENTS WHICH BELONGS TO THE ACCOUNT
+### USING HOSPITAL TOKEN
+GET http://localhost:5000/api/appointments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2NlNDEwMzUzZjkxN2Y1NjU5Zjg1NCIsImFjY291bnRUeXBlIjoiaG9zcGl0YWwiLCJpYXQiOjE2ODU5NTE4NjZ9.YoXIMFERX6wipZtXu9zmtAIqDSckUAfmHNk-bzHZ_Ac
+
+
+### USING USER TOKEN
+GET http://localhost:5000/api/appointments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2NjMmU0ZTY2NGYyNjM4ZjMwMzQ3OSIsImFjY291bnRUeXBlIjoidXNlciIsImlhdCI6MTY4NTk1MzA4M30.emKmHDxxw9ZoItZYknDT9gpEFSbCmoJCItpDnOBWCCk
+
+### GET APPINTMENT BY ID
+GET http://localhost:5000/api/appointments/647d98ae4469302779e57c89
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2NlNDEwMzUzZjkxN2Y1NjU5Zjg1NCIsImFjY291bnRUeXBlIjoiaG9zcGl0YWwiLCJpYXQiOjE2ODU5NTE4NjZ9.YoXIMFERX6wipZtXu9zmtAIqDSckUAfmHNk-bzHZ_Ac
+
+
+
+
+
+### CREATE NEW APPOINTMENT
+POST http://localhost:5000/api/appointments
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2NjMmU0ZTY2NGYyNjM4ZjMwMzQ3OSIsImFjY291bnRUeXBlIjoidXNlciIsImlhdCI6MTY4NTg5Nzk1Nn0.-pD4IxGBqP1wpRq_D1H3cSaOJcmVZOdMDohsTX_Qmas
+
+{
+   "doctor":"647ceda4a8525cb72e15cb64",
+   "date": "2023-06-15",
+   "time": "12:45",
+   "amount": 900
+}
+
+###
+DELETE http://localhost:5000/api/appointments/647db2b7d0fbe27a569df01b
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0N2NjMmU0ZTY2NGYyNjM4ZjMwMzQ3OSIsImFjY291bnRUeXBlIjoidXNlciIsImlhdCI6MTY4NTg5Nzk1Nn0.-pD4IxGBqP1wpRq_D1H3cSaOJcmVZOdMDohsTX_Qmas
