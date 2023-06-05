@@ -1,4 +1,7 @@
 const Hospital = require('../models/hospital.model')
+const hashPassword = require('../helpers/hashUserPassword')
+const generateToken = require('../helpers/generateToken')
+const bcrypt = require('bcrypt');
 
 // Get all hospitals
 async function getAllHospitals(req, res, next) {
@@ -28,18 +31,20 @@ async function getHospitalById(req, res, next) {
 
 // Create a new hospital
 async function createHospital(req, res, next) {
-   const { name, email, address, contactNumber } = req.body
+   const { name, email, password, address, contactNumber } = req.body
+   const hashedPassword = await bcrypt.hash(password, 10);
    try {
       const hospital = await Hospital.create({
          name,
          email,
-         password,
+         password: hashedPassword,
          address,
          contactNumber,
       })
       res.status(201).json(hospital)
    } catch (error) {
-      next(error)
+      next(error);
+      return res.status(500).json({ message: 'Error creating hospital account' });
    }
 }
 
