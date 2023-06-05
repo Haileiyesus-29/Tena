@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Doctor = require("../models/doctor.model");
-
+const hashPassword = require('../helpers/hashUserPassword');
+const generateToken = require('../helpers/generateToken');
 
 // Create doctor profile
 const createDoctor = asyncHandler(async (req, res) => {
@@ -12,7 +13,7 @@ const createDoctor = asyncHandler(async (req, res) => {
     throw new Error("Please fill in all fields");
   }
   // Create doctor account
-  const Doctor = await Doctor.create({
+  const doctor = await Doctor.create({
     user: req.user.id,
     name,
     speciality,
@@ -22,22 +23,21 @@ const createDoctor = asyncHandler(async (req, res) => {
     //image: fileData,
   });
 
-  res.status(201).json(product);
+  res.status(201).json(Doctor);
 });
-
-// Get all the doctors
+// Get all doctors
 const getDoctors = asyncHandler(async (req, res) => {
   const doctors = await Doctor.find({ hospital: req.hospital.id }).sort("-createdAt");
-  res.status(200).json(products);
+  res.status(200).json(Doctor);
 });
 
-// Get one doctor
+// Get details of a single doctor
 const getDoctor = asyncHandler(async (req, res) => {
   const doctor = await Doctor.findById(req.params.id);
   // if doctor doesnt exist
   if (!doctor) {
     res.status(404);
-    throw new Error("Product not found");
+    throw new Error("Doctor not found");
   }
   // Match doctor to its hospital
   if (doctor.hospital.toString() !== req.hospital.id) {
