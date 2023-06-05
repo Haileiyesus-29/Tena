@@ -12,11 +12,6 @@ const doctorSchema = new mongoose.Schema(
          type: String,
          required: true,
       },
-      hospital_id: {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: 'Hospital',
-         required: true,
-      },
       email: {
          type: String,
          required: true,
@@ -29,6 +24,11 @@ const doctorSchema = new mongoose.Schema(
          required: true,
          minlength: 8,
          maxlength: 100,
+      },
+      hospital_id: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Hospital',
+         required: true,
       },
    },
    { versionKey: false }
