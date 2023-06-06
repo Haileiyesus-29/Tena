@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const paymentSchema = new mongoose.Schema(
    {
-      patient_id: {
+      user_id: {
          type: mongoose.Schema.Types.ObjectId,
          ref: 'User',
          required: true,
@@ -24,6 +24,11 @@ const paymentSchema = new mongoose.Schema(
          type: Date,
          default: () => Date.now(),
       },
+      payment_status: {
+         type: String,
+         enum: ['paid', 'unpaid'],
+         default: 'unpaid'
+      }
    },
    { versionKey: false }
 )
