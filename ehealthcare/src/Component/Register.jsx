@@ -1,5 +1,14 @@
-import React from "react";
-import { Stack, Box, Typography, Button, TextField } from "@mui/material";
+import { React, useState } from "react";
+import {
+  Stack,
+  Box,
+  Typography,
+  Button,
+  TextField,
+  Radio,
+  FormControlLabel,
+  RadioGroup,
+} from "@mui/material";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 function Register() {
@@ -20,7 +29,10 @@ function Register() {
       color: white;
     }
   `;
-
+  const [value, setValue] = useState("");
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
   return (
     <Stack
       sx={{
@@ -45,10 +57,30 @@ function Register() {
           Register
         </Typography>
         <Stack spacing={3} m={"30px"}>
-          <StyledInput
+          <RadioGroup value={value} onChange={handleChange}>
+            <Stack direction={"row"}>
+              <FormControlLabel
+                sx={{ color: "#ffffff" }}
+                value="hospital"
+                control={<Radio color="primary" />}
+                label="As Hospital"
+              />
+              <FormControlLabel
+                sx={{ color: "#ffffff" }}
+                value="user"
+                control={<Radio color="primary" />}
+                label="As User"
+              />
+            </Stack>
+          </RadioGroup>
+
+          {value === "hospital" ? (
+            <>
+            <StyledInput
             id="outlined-name"
-            label="Name"
+            label="Name of Hospital"
             type="text"
+            name="email"
             margin="normal"
             variant="outlined"
           />
@@ -56,9 +88,47 @@ function Register() {
             id="outlined-name"
             label="Email"
             type="email"
+            name="email"
             margin="normal"
             variant="outlined"
           />
+              <StyledInput
+                id="outlined-name"
+                label="Address"
+                type="string"
+                margin="normal"
+                variant="outlined"
+                name="address"
+              />
+              <StyledInput
+                id="outlined-name"
+                label="Phone Number"
+                type="string"
+                margin="normal"
+                variant="outlined"
+                name="contactNumber"
+              />
+            </>
+          ) : (
+            <>
+            <StyledInput
+            id="outlined-name"
+            label="Name"
+            type="text"
+            name="email"
+            margin="normal"
+            variant="outlined"
+          />
+          <StyledInput
+            id="outlined-name"
+            label="Email"
+            type="email"
+            name="email"
+            margin="normal"
+            variant="outlined"
+          />
+          </>
+          )}
           <StyledInput
             id="outlined-name"
             label="Password"
@@ -73,11 +143,12 @@ function Register() {
             margin="normal"
             variant="outlined"
           />
+
           <Button variant="contained" sx={{ m: 4, p: 1.5 }}>
             register
           </Button>
           <Typography style={{ color: "azure" }}>
-            Do you have an Account?{" "}
+            Do you have an Account?
             <Link to="/login" className="link-footer">
               SignIn
             </Link>
