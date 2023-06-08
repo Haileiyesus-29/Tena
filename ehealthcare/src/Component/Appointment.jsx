@@ -11,13 +11,12 @@ import {
 import { useState } from "react";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
-
 function Appointment() {
   const [displayText, setDisplayText] = useState(true);
   const handleClick = () => {
     setDisplayText(!displayText);
   };
-
+  const [user,setUser] = useState([])
   return (
     <>
       <Navbar />
