@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const validateForm = require('../validations/validateForm')
 const authenticate = require('../middlewares/authenticate')
-
+const checkEmailInUse = require('../middlewares/checkEmailInUse')
 const {
    getAllDoctors,
    getDoctorById,
@@ -18,7 +18,7 @@ router.get('/', getAllDoctors)
 router.get('/:id', getDoctorById)
 
 // CREATE a new doctor
-router.post('/', validateForm, authenticate, createDoctor)
+router.post('/', validateForm, checkEmailInUse, authenticate, createDoctor)
 
 // UPDATE a doctor by ID
 router.put('/me', authenticate, updateDoctor)

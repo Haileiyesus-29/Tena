@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const validateForm = require('../validations/validateForm')
-const validateAccount = require('../validations/validateAccount')
 const authenticate = require('../middlewares/authenticate')
+const checkEmailInUse = require('../middlewares/checkEmailInUse')
 const {
    createUser,
    getUser,
@@ -15,7 +15,7 @@ const {
 router.get('/', getAllUsers)
 
 // Create a new user
-router.post('/', validateForm, createUser)
+router.post('/', validateForm, checkEmailInUse, createUser)
 
 // Get user details
 router.get('/:userId', getUser)

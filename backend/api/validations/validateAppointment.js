@@ -31,6 +31,26 @@ const validateAppointment = async (req, res, next) => {
          })
       }
 
+      // Check for overlapping appointments within 30 minutes
+      const thirtyMinutesBefore = new Date(
+         appointmentDateTime.getTime() - 30 * 60000
+      )
+      const thirtyMinutesAfter = new Date(
+         appointmentDateTime.getTime() + 30 * 60000
+      )
+
+      const overlappingAppointment = await Appointment.findOne({
+         doctor: doctorId,
+         date: { $eq: date },
+         time: { $gte: thirtyMinutesBefore, $lte: thirtyMinutesAfter },
+      })
+
+      if (overlappingAppointment) {
+         return res.status(400).json({
+            error: 'Another appointment is already scheduled within 30 minutes of this time',
+         })
+      }
+
       req.hospitalId = doctor.hospital_id
 
       next()
