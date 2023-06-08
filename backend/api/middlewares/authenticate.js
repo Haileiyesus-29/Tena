@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/user.model')
 
-async function authenticateUser(req, res, next) {
+async function authenticate(req, res, next) {
    const token = req.header('Authorization')?.split(' ')[1]
    if (!token) {
       const error = new Error('Authorization token is missing')
@@ -22,10 +22,12 @@ async function authenticateUser(req, res, next) {
 
       // Extract the user ID from the decoded token
       const userId = decoded?.id
+      const accType = decoded?.acc
 
       // Load the user from the database based on the user ID
-      const user = await User.findById(userId).select('email, name')
+      const user = await User.findById(userId).select('-password -created-at')
       if (!user) return next('Not found')
+      req.acc = accType
       req.user = user
       next()
    } catch (err) {
@@ -33,4 +35,4 @@ async function authenticateUser(req, res, next) {
    }
 }
 
-module.exports = authenticateUser
+module.exports = authenticate
