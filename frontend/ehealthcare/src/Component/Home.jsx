@@ -61,7 +61,7 @@ function Home() {
             advice, and prescription refills to help you manage your health from
             the comfort of your own home. <br />
             <Link to="/about">
-              <Button variant="outlined" sx={{ borderWidth: 2 }}>
+              <Button variant="outlined"  sx={{ borderWidth: 2,margin:'20px' }} >
                 Read more...
               </Button>
             </Link>

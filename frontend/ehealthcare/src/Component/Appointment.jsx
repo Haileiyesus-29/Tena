@@ -11,13 +11,12 @@ import {
 import { useState } from "react";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
-
 function Appointment() {
   const [displayText, setDisplayText] = useState(true);
   const handleClick = () => {
     setDisplayText(!displayText);
   };
-
+  const [user,setUser] = useState([])
   return (
     <>
       <Navbar />
@@ -50,23 +49,8 @@ function Appointment() {
       <Stack direction={"row"} width={"100%"} justifyContent={"space-between"}>
         <Stack>
           <Stack ml={"15vh"} mt={"50px"} spacing={3} width={"70vh"}>
-            <TextField type="text" label="Name" />
-            <TextField type="number" label="Phone Number" />
-            <TextField type="email" label="Email" />
-            <TextField type="date" />
-            <Select label="Appointmnet">
-              <MenuItem value={"Routine check-up"}>Routine check-up</MenuItem>
-              <MenuItem value={"Telemedicine"}>Telemedicine</MenuItem>
-              <MenuItem value={"Specialist consultation"}>
-                Specialist consultation
-              </MenuItem>
-              <MenuItem value={"Follow-up visit"}>Follow-up visit</MenuItem>
-              <MenuItem value={"Preventive care"}>Preventive care</MenuItem>
-            </Select>
+            <TextField type="datetime-local" />
             <Select label="Doctors">
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
               <MenuItem value={"Dr Jhon Smith"}>Dr Jhon Smith</MenuItem>
               <MenuItem value={"Dr John Smith"}>Dr Cristina Arun</MenuItem>
               <MenuItem value={"Dr John Smith"}>Dr Mathew Doe</MenuItem>
@@ -75,15 +59,15 @@ function Appointment() {
               placeholder="Anything you want to add"
               minRows={5}
             ></TextareaAutosize>
-            <Link to="/detail">
+           
               <Button variant="contained" sx={{ m: 4, p: 1.5 }}>
-                Schedule Now
+               <Link to="/detail" className="link-header">  Schedule Now</Link>
               </Button>
-            </Link>
+            
           </Stack>
         </Stack>
         <Stack width={"50%"} mb={"40px"}>
-          <Stack textAlign={"center"} mb={"20px"}>
+          <Stack textAlign={"center"} mb={"20px"} mt={"30px"}>
             <Typography variant="h3" style={{ color: "#02307E" }}>
               FQA
             </Typography>
