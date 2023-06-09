@@ -80,7 +80,7 @@ function Register() {
             id="outlined-name"
             label="Name of Hospital"
             type="text"
-            name="email"
+            name="name"
             margin="normal"
             variant="outlined"
           />

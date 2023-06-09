@@ -16,7 +16,7 @@ function Appointment() {
   const handleClick = () => {
     setDisplayText(!displayText);
   };
-  const [user,setUser] = useState([])
+  // const [user,setUser] = useState([])
   return (
     <>
       <Navbar />

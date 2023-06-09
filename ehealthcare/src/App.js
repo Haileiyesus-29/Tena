@@ -14,6 +14,8 @@ import AdminHome from "./Component/Admin/AdminHome";
 import AddDoctor from "./Component/Admin/AddDoctor";
 import ListOfAppointment from "./Component/Admin/ListOfAppointment";
 import UpdateDoctor from "./Component/Admin/UpdateDoctor";
+import ProfileUpdate from "./Component/Admin/ProfileUpdate";
+import Delete from "./Component/Admin/Delete";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
         <Route path='/adddoctor' element={<AddDoctor/>}/>
         <Route path="/listofappointment" element={<ListOfAppointment/>}/>
         <Route path="/updatedoctor/:id" element={<UpdateDoctor/>}/>
+        <Route path ="/updateprofile/" element={<ProfileUpdate/>}/>
+        <Route path="/delete/" element={<Delete/>}/>
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,17 @@
-import { Avatar, IconButton, Toolbar, Typography,Menu,MenuItem } from "@mui/material";
+import {
+  Avatar,
+  IconButton,
+  Toolbar,
+  Typography,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Popup } from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
+import Delete from "./Delete";
+import ProfileUpdate from "./ProfileUpdate";
 function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -62,8 +73,36 @@ function Navbar() {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Update Profile</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <Popup
+            trigger={<MenuItem onClick={handleClose}>Update Profile</MenuItem>}
+            modal
+            nested
+          >
+            {(close) => (
+              <div className="modal">
+                <div className="content">
+                  <ProfileUpdate close={close} />
+                </div>
+              </div>
+            )}
+          </Popup>
+
+          <Link to="/login" className="link-nav">
+            <MenuItem onClick={handleClose}>Logout</MenuItem>
+          </Link>
+          <Popup
+            trigger={<MenuItem onClick={handleClose}>Delete Account</MenuItem>}
+            modal
+            nested
+          >
+            {(close) => (
+              <div className="modal">
+                <div className="content">
+                  <Delete close={close} />
+                </div>
+              </div>
+            )}
+          </Popup>
         </Menu>
       </Typography>
     </Toolbar>

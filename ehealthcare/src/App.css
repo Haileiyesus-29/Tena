@@ -15,3 +15,7 @@
   color: #2AA7FF;
   border-bottom: 2px solid #2AA7FF;
 }
+.link-nav{
+  text-decoration: none;
+  color: black;
+}
