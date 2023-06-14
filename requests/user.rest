@@ -1,9 +1,9 @@
 ### GET ALL USERS
-GET http://localhost:5000/api/users
+# GET http://localhost:5000/api/users
 
 
 ### GET USER BY ID
-GET http://localhost:5000/api/users/6471134f0cb534c7d4137552
+GET http://localhost:5000/api/users/648a39beb12a5e71decde950
 
 
 ### CREATE USER

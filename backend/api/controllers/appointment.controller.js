@@ -17,11 +17,7 @@ const createAppointment = async (req, res, next) => {
 
       // Save the appointment to the database
       await appointment.save()
-
-      res.status(201).json({
-         message: 'Appointment created successfully',
-         appointment,
-      })
+      res.status(201).json({ appointment })
    } catch (error) {
       next(error)
    }
@@ -29,18 +25,10 @@ const createAppointment = async (req, res, next) => {
 
 // Get all appointments
 const getAllAppointments = async (req, res, next) => {
-   let populates = ['doctor', 'user', 'hospital']
-   let populateString = populates
-      .filter(p => p != [req.accountType])
-      .join(' ')
-      .trim()
-
    try {
-      const appointments = await Appointment.find({
-         [req.accountType]: req.userId,
-      })
+      const appointments = await Appointment.find({ [req.accType]: req.userId })
          .select('date time status')
-         .populate(populateString, 'name')
+         .populate('doctor user hospital', 'name')
 
       const formattedAppointments = appointments.map(appointment => {
          return {
@@ -62,22 +50,14 @@ const getAllAppointments = async (req, res, next) => {
 
 // Get appointment by ID
 const getAppointmentById = async (req, res, next) => {
-   let populates = ['doctor', 'user', 'hospital']
-   let populateString = populates
-      .filter(p => p != [req.accountType])
-      .join(' ')
-      .trim()
-
    try {
       const appointmentId = req.params.id
       const appointment = await Appointment.findOne({
          _id: appointmentId,
-         [req.accountType]: req.userId,
-      }).populate(populateString, '_id name')
+         [req.accType]: req.userId,
+      }).populate('user doctor hospital', '_id name')
 
-      if (!appointment) {
-         return res.status(404).json({ message: 'Appointment not found' })
-      }
+      if (!appointment) return next({ message: 'Not found', status: 404 })
 
       const formattedAppointments = {
          appointment_id: appointment._id,
@@ -111,8 +91,7 @@ const deleteAppointmentById = async (req, res, next) => {
       if (!appointment) {
          return res.status(404).json({ message: 'Appointment not found' })
       }
-
-      res.status(200).json({ message: 'Appointment deleted successfully' })
+      res.status(204).json({ message: 'Appointment deleted successfully' })
    } catch (error) {
       next(error)
    }

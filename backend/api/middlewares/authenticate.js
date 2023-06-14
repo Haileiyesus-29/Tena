@@ -1,11 +1,9 @@
 const jwt = require('jsonwebtoken')
+const findAccount = require('../helpers/findAccount')
 
 async function authenticate(req, res, next) {
    const token = req.header('Authorization')?.split(' ')[1]
-   if (!token) {
-      const error = new Error('Authorization token is missing')
-      return next(error)
-   }
+   if (!token) return next({ message: 'Bad Request', status: 400 })
 
    try {
       const decoded = await jwt.verify(
@@ -16,13 +14,18 @@ async function authenticate(req, res, next) {
             return data
          }
       )
+      if (!decoded.id) return next({ message: 'Bad Request', status: 400 })
+      const {
+         account: { _id: userId },
+         accType,
+      } = await findAccount({ _id: decoded.id })
 
-      if (!decoded.id) return next('Invalid token provided')
-      req.userId = decoded.id
-      req.accountType = decoded?.accountType
+      if (!account) return next({ message: 'Not Found', status: 404 })
+      req.userId = userId
+      req.accType = accType
       next()
    } catch (err) {
-      return next('Invalid token')
+      return next({ message: 'Bad Request', status: 400 })
    }
 }
 

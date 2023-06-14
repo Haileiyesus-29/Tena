@@ -12,7 +12,7 @@ const doctorSchema = new mongoose.Schema(
          type: String,
          required: true,
       },
-      hospital_id: {
+      hospital: {
          type: mongoose.Schema.Types.ObjectId,
          ref: 'Hospital',
          required: true,

@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const validateForm = require('../validations/validateForm')
 const authenticate = require('../middlewares/authenticate')
-const checkEmailInUse = require('../middlewares/checkEmailInUse')
 const {
    createUser,
    getUser,
@@ -11,11 +10,19 @@ const {
    getAllUsers,
 } = require('../controllers/user.controller')
 
+/**
+ * @request GET
+ * @route /api/users
+ * used to fetch all users
+ * must include the token to verify the user
+ *
+ */
+
 // Get all users
-router.get('/', getAllUsers)
+// router.get('/', getAllUsers)
 
 // Create a new user
-router.post('/', validateForm, checkEmailInUse, createUser)
+router.post('/', validateForm, createUser)
 
 // Get user details
 router.get('/:userId', getUser)

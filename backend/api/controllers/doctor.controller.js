@@ -9,7 +9,7 @@ const nameValidator = require('../helpers/nameValidator')
 async function getAllDoctors(req, res, next) {
    try {
       const doctors = await Doctor.find().select('-password')
-      res.json(doctors)
+      res.status(200).json(doctors)
    } catch (error) {
       next(error)
    }
@@ -20,11 +20,7 @@ async function getDoctorById(req, res, next) {
    const { id } = req.params
    try {
       const doctor = await Doctor.findById(id).select('-password')
-      if (!doctor) {
-         const error = new Error('doctor not found')
-         error.status = 404
-         throw error
-      }
+      if (!doctor) return next({ message: 'Not Found', status: 404 })
       res.json(doctor)
    } catch (error) {
       next(error)
@@ -46,7 +42,7 @@ async function createDoctor(req, res, next) {
          email,
          specialty,
          password: hashedPassword,
-         hospital_id: hospital._id,
+         hospital: hospital._id,
       })
       await doctor.save()
       const token = await generateToken({ id: doctor._id })
@@ -92,7 +88,7 @@ async function updateDoctor(req, res, next) {
    }
 }
 
-// Delete a doctor by ID
+// Delete own doctor account
 async function deleteDoctor(req, res, next) {
    try {
       const doctor = await Doctor.findByIdAndDelete(req.userId)
@@ -107,10 +103,26 @@ async function deleteDoctor(req, res, next) {
    }
 }
 
+// Delete doctor account for hospital
+async function deleteDoctorById(req, res, next) {
+   if (req.accType !== 'hospital')
+      return next({ message: 'Forbidden', status: 403 })
+
+   const { id } = req.params
+   try {
+      const doctor = await Doctor.findOneAndDelete({ hospital: id })
+      if (!doctor) return next({ message: 'Not Found', status: 404 })
+      res.sendStatus(204)
+   } catch (error) {
+      next(error)
+   }
+}
+
 module.exports = {
    getAllDoctors,
    getDoctorById,
    createDoctor,
    updateDoctor,
    deleteDoctor,
+   deleteDoctorById,
 }

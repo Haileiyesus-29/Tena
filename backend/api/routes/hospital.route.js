@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const validateForm = require('../validations/validateForm')
 const authenticate = require('../middlewares/authenticate')
-const checkEmailInUse = require('../middlewares/checkEmailInUse')
 const {
    getAllHospitals,
    getHospitalById,
@@ -18,7 +17,7 @@ router.get('/', getAllHospitals)
 router.get('/:id', getHospitalById)
 
 // CREATE a new hospital
-router.post('/', validateForm, checkEmailInUse, createHospital)
+router.post('/', validateForm, createHospital)
 
 // UPDATE a hospital by ID
 router.put('/me', authenticate, updateHospital)

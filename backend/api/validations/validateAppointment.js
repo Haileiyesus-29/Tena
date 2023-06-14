@@ -6,30 +6,26 @@ const validateAppointment = async (req, res, next) => {
    try {
       // Check if the doctor is valid
       const doctor = await Doctor.findById(doctorId)
-      if (!doctor) {
-         return res.status(404).json({ error: 'Invalid doctor' })
-      }
+      if (!doctor) return next({ message: 'Not Found', status: 404 })
 
       // Check if the date and time are provided
-      if (!date || !time) {
-         return res.status(400).json({ error: 'Date and time are required' })
-      }
+      if (!date || !time) return next({ message: 'Bad Request', status: 400 })
 
       // Check if the date and time are not behind the current date and time
       const appointmentDateTime = new Date(`${date}T${time}`)
-      if (isNaN(appointmentDateTime) || appointmentDateTime < new Date()) {
-         return res.status(400).json({ error: 'Invalid date or time' })
-      }
+      if (isNaN(appointmentDateTime) || appointmentDateTime < new Date())
+         return next({ message: 'Bad Request', status: 400 })
 
       // Check if the appointment time is between 8:00 a.m. and 5:00 p.m.
       const startTime = new Date(`${date}T08:00`)
       const endTime = new Date(`${date}T17:00`)
 
-      if (appointmentDateTime < startTime || appointmentDateTime > endTime) {
-         return res.status(400).json({
+      if (appointmentDateTime < startTime || appointmentDateTime > endTime)
+         return next({
             error: 'Appointment time must be between 8:00 a.m. and 5:00 p.m.',
+            message: 'Bad Request',
+            status: 400,
          })
-      }
 
       // Check for overlapping appointments within 30 minutes
       const thirtyMinutesBefore = new Date(
@@ -45,14 +41,13 @@ const validateAppointment = async (req, res, next) => {
          time: { $gte: thirtyMinutesBefore, $lte: thirtyMinutesAfter },
       })
 
-      if (overlappingAppointment) {
-         return res.status(400).json({
+      if (overlappingAppointment)
+         return next({
             error: 'Another appointment is already scheduled within 30 minutes of this time',
+            message: 'Bad Request',
+            status: 400,
          })
-      }
-
       req.hospitalId = doctor.hospital_id
-
       next()
    } catch (error) {
       next(error)

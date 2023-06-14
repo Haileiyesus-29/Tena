@@ -77,13 +77,8 @@ async function updateHospital(req, res, next) {
       return next({ errors, message: 'Bad Request', status: 400 })
 
    try {
-      const hospital = await Hospital.findByIdAndUpdate(req.userId, update)
-      if (!hospital) {
-         const error = new Error('Hospital not found')
-         error.status = 404
-         throw error
-      }
-      res.status(201).json({ message: 'update successful', status: 201 })
+      await Hospital.findByIdAndUpdate(req.userId, update)
+      res.status(201).json({ message: 'update successful' })
    } catch (error) {
       next(error)
    }
@@ -93,11 +88,6 @@ async function updateHospital(req, res, next) {
 async function deleteHospital(req, res, next) {
    try {
       const hospital = await Hospital.findByIdAndDelete(req.userId)
-      if (!hospital) {
-         const error = new Error('Hospital not found')
-         error.status = 404
-         return next(error)
-      }
       res.sendStatus(204)
    } catch (error) {
       next(error)

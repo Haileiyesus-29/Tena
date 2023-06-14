@@ -24,7 +24,6 @@ app.use('/api/appointments', appointmentRoutes)
 app.use('/api/payments', paymentRoutes)
 app.use('/api/messages', messageRoutes)
 app.use('/api/login', loginRoute)
-
 app.use(errorHandler)
 
 mongoose

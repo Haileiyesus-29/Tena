@@ -59,12 +59,11 @@ const getAllMessages = async (req, res, next) => {
 const getMessageThread = async (req, res, next) => {
    const skip = req.query.skip || 0
    const limit = req.query.limit || 10
-   const id = req.params.id
    try {
       const chatHistory = await Message.find({
          $or: [
-            { sender: req.user._id, receiver: id },
-            { sender: id, receiver: req.user._id },
+            { sender: req.user._id, receiver: req.params?.id },
+            { sender: req.params?.id, receiver: req.user._id },
          ],
       })
          .sort({ timestamp: 1 })

@@ -1,8 +1,6 @@
 const bcrypt = require('bcryptjs')
-const User = require('../models/user.model')
-const Hospital = require('../models/hospital.model')
-const Doctor = require('../models/doctor.model')
 const generateToken = require('../helpers/generateToken')
+const findAccount = require('../helpers/findAccount')
 
 async function validateAccount(req, res, next) {
    const { email, password } = req.body
@@ -13,40 +11,14 @@ async function validateAccount(req, res, next) {
       return next(error)
    }
 
-   const userPromises = [
-      User.findOne({ email }),
-      Hospital.findOne({ email }),
-      Doctor.findOne({ email }),
-   ]
-
-   const [user, hospital, doctor] = await Promise.all(userPromises)
-
-   let account
-   let accountType
-   if (user) {
-      account = user
-      accountType = 'user'
-   } else if (hospital) {
-      account = hospital
-      accountType = 'hospital'
-   } else if (doctor) {
-      account = doctor
-      accountType = 'doctor'
-   } else {
-      return next('Invalid username or password')
-   }
-
+   const { account, accType } = await findAccount({ email })
+   if (!account) return next({ message: 'Bad Request', status: 400 })
    const hasCorrectCredential = await bcrypt.compare(password, account.password)
-   account.password = undefined
-   if (!hasCorrectCredential) return next('Invalid username or password')
+   if (!hasCorrectCredential)
+      return next({ message: 'Bad Request', status: 400 })
 
-   const token = await generateToken({ id: account._id, accountType })
-   res.json({
-      message: 'successfullly logged in',
-      account,
-      accountType,
-      token,
-   })
+   const token = await generateToken({ id: account._id })
+   res.status(200).json({ account, accType, token })
 }
 
 module.exports = validateAccount
