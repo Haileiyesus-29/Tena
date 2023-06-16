@@ -6,11 +6,26 @@ import {
   CardContent,
   Button,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
-
+// import axios from "axios";
 function AdminHome() {
+  const [data, setData] = useState([{}]);
+  async function getDoctors() {
+    const response = await fetch(" http://localhost:5000/api/doctors", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((json) => setData(json.data));
+    if (response.status === 200) {
+      setData(response.data);
+    }
+  }
+
+  useEffect(() => {
+    getDoctors();
+  }, []);
   return (
     <>
       <Navbar />
@@ -37,45 +52,47 @@ function AdminHome() {
           </Button>
         </Link>
         <Stack m={"20px"}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
-              component="img"
-              sx={{ height: 400 }}
-              image="https://img.freepik.com/free-photo/portrait-experienced-professional-therapist-with-stethoscope-looking-camera_1098-19305.jpg?size=626&ext=jpg&ga=GA1.1.1624204321.1680518598&semt=ais"
-            />
-            <CardContent>
-              <Typography
-                gutterBottom
-                variant="h4"
-                component="div"
-                sx={{ fontWeight: "700" }}
-              >
-                Dr. John Smith
-              </Typography>
-              <Typography variant="h5" style={{ color: "#1B3C74" }}>
-                Cardologist
-              </Typography>
-              <Typography
-                variant="h5"
-                style={{ color: "#2AA7FF", fontStyle: "italic" }}
-              >
-                dr.JohnSmith@gmail.com
-              </Typography>
-              <Stack m={2} direction="row" spacing={3}>
-                <Link to={`/updatedoctor/1`}>
+          {data.map((user, index) => (
+            <Card sx={{ maxWidth: 345 }} key={index}>
+              <CardMedia
+                component="img"
+                sx={{ height: 400 }}
+                image="https://img.freepik.com/free-photo/portrait-experienced-professional-therapist-with-stethoscope-looking-camera_1098-19305.jpg?size=626&ext=jpg&ga=GA1.1.1624204321.1680518598&semt=ais"
+              />
+              <CardContent>
+                <Typography
+                  gutterBottom
+                  variant="h4"
+                  component="div"
+                  sx={{ fontWeight: "700" }}
+                >
+                  {user.name}
+                </Typography>
+                <Typography variant="h5" style={{ color: "#1B3C74" }}>
+                  {user.specialty}
+                </Typography>
+                <Typography
+                  variant="h5"
+                  style={{ color: "#2AA7FF", fontStyle: "italic" }}
+                >
+                  {user.email}
+                </Typography>
+                <Stack m={2} direction="row" spacing={3}>
+                  <Link to={`/updatedoctor/1`}>
+                    <Button variant="contained" color="info">
+                      Update
+                    </Button>
+                  </Link>
                   <Button variant="contained" color="info">
-                    Update
+                    View
                   </Button>
-                </Link>
-                <Button variant="contained" color="info">
-                  View
-                </Button>
-                <Button variant="contained" color="error">
-                  Delete
-                </Button>
-              </Stack>
-            </CardContent>
-          </Card>
+                  <Button variant="contained" color="error">
+                    Delete
+                  </Button>
+                </Stack>
+              </CardContent>
+            </Card>
+          ))}
         </Stack>
       </Stack>
     </>

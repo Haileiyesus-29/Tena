@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect ,useState} from "react";
 import {
   Stack,
   TextField,
@@ -8,7 +8,6 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
-import { useState } from "react";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 function Appointment() {
@@ -16,7 +15,14 @@ function Appointment() {
   const handleClick = () => {
     setDisplayText(!displayText);
   };
-  // const [user,setUser] = useState([])
+  const [user,setUser] = useState([])
+useEffect(()=>{
+  fetch("http://localhost:5000/api/doctors",{
+    method:'GET'
+  })
+  .then((res)=>res.json())
+  .then((data)=>setUser(data.data))
+},[])
   return (
     <>
       <Navbar />
@@ -51,9 +57,12 @@ function Appointment() {
           <Stack ml={"15vh"} mt={"50px"} spacing={3} width={"70vh"}>
             <TextField type="datetime-local" />
             <Select label="Doctors">
-              <MenuItem value={"Dr Jhon Smith"}>Dr Jhon Smith</MenuItem>
+              {user&& user.map((doc)=>(
+                 <MenuItem value={doc.name}>{doc.name}</MenuItem>
+              ))}
+              {/* <MenuItem value={"Dr Jhon Smith"}>Dr Jhon Smith</MenuItem>
               <MenuItem value={"Dr John Smith"}>Dr Cristina Arun</MenuItem>
-              <MenuItem value={"Dr John Smith"}>Dr Mathew Doe</MenuItem>
+              <MenuItem value={"Dr John Smith"}>Dr Mathew Doe</MenuItem> */}
             </Select>
             <TextareaAutosize
               placeholder="Anything you want to add"

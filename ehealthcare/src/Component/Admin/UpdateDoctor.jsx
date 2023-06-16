@@ -10,7 +10,7 @@ function UpdateDoctor() {
   }, []);
   const id = 1;
   async function getDoctors(id) {
-    var response = await axios.get("/");
+    var response = await axios.get("http://localhost:5000/api/doctors");
     if (response.status === 200) {
       setValue({ ...response.data });
     }

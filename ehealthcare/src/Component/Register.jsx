@@ -75,7 +75,7 @@ function Register() {
           </RadioGroup>
 
           {value === "hospital" ? (
-            <>
+            <> 
             <StyledInput
             id="outlined-name"
             label="Name of Hospital"
@@ -85,7 +85,7 @@ function Register() {
             variant="outlined"
           />
           <StyledInput
-            id="outlined-name"
+            id="outlined-email"
             label="Email"
             type="email"
             name="email"
@@ -93,7 +93,7 @@ function Register() {
             variant="outlined"
           />
               <StyledInput
-                id="outlined-name"
+                id="outlined-address"
                 label="Address"
                 type="string"
                 margin="normal"
@@ -101,7 +101,7 @@ function Register() {
                 name="address"
               />
               <StyledInput
-                id="outlined-name"
+                id="outlined-number"
                 label="Phone Number"
                 type="string"
                 margin="normal"
@@ -115,12 +115,12 @@ function Register() {
             id="outlined-name"
             label="Name"
             type="text"
-            name="email"
+            name="name"
             margin="normal"
             variant="outlined"
           />
           <StyledInput
-            id="outlined-name"
+            id="outlined-email"
             label="Email"
             type="email"
             name="email"
@@ -130,14 +130,14 @@ function Register() {
           </>
           )}
           <StyledInput
-            id="outlined-name"
+            id="outlined-password"
             label="Password"
             type="password"
             margin="normal"
             variant="outlined"
           />
           <StyledInput
-            id="outlined-name"
+            id="outlined-confirm"
             label="Confirm Password"
             type="password"
             margin="normal"
