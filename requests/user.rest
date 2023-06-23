@@ -3,7 +3,7 @@
 
 
 ### GET USER BY ID
-GET http://localhost:5000/api/users/648a39beb12a5e71decde950
+GET http://localhost:5000/api/users/648a39beb12a5e71decde951r
 
 
 ### CREATE USER
@@ -11,8 +11,8 @@ POST http://localhost:5000/api/users
 Content-Type: application/json
 
 {
-   "name": "smithth",
-   "email":"john99@email.com",
+   "name": "sme",
+   "email":"john99a@email.com",
    "password": "P@ssw0rd"
 }
 

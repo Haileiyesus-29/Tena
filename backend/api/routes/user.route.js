@@ -11,26 +11,41 @@ const {
 } = require('../controllers/user.controller')
 
 /**
- * @request GET
- * @route /api/users
- * used to fetch all users
- * must include the token to verify the user
- *
+ * @route  GET /api/users
+ * @description Get all users
  */
+router.get('/', getAllUsers)
 
-// Get all users
-// router.get('/', getAllUsers)
-
-// Create a new user
+/**
+ * @route  POST /api/users
+ * @description Create a new user
+ * @param  {string} name - The name of the user
+ * @param  {string} email - The email of the user
+ * @param  {string} password - The password of the user
+ */
 router.post('/', validateForm, createUser)
 
-// Get user details
+/**
+ * @route  GET /api/users/:userId
+ * @description Get user details
+ * @param  {string} userId - The ID of the user
+ */
 router.get('/:userId', getUser)
 
-// Update user information
+/**
+ * @route  PUT /api/users/me
+ * @description Update user information
+ * @param  {string} name - The name of the user
+ * @param  {string} password - The password of the user
+ * @header  {string} Authorization - User's JWT token
+ */
 router.put('/me', authenticate, updateUser)
 
-// Delete a user
+/**
+ * @route  DELETE /api/users/me
+ * @description Delete user account
+ * @header  {string} Authorization - User's JWT token
+ */
 router.delete('/me', authenticate, deleteUser)
 
 module.exports = router

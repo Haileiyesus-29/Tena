@@ -2,22 +2,18 @@ const Payment = require('../models/payment.model')
 
 async function makePayment(req, res, next) {
    const { amount, method } = req.body
-   if (!amount) return next({ message: 'Bad Request', status: 400 })
+   if (!amount) return next({ status: 400, errors :['amount is required'] })
 
-   try {
-      const payment = new Payment({
-         amount,
-         method,
-         user: req.userId,
-         hospital: req.hospitalId,
-      })
-      await payment.save()
-      if (!payment) throw Error()
-      req.paymentId = payment._id
-      next()
-   } catch (error) {
-      next(error)
-   }
+   const payment = new Payment({
+      amount,
+      method,
+      user: req.userId,
+      hospital: req.hospitalId,
+   })
+   await payment.save()
+   if (!payment) return next({ status: 500 })
+   req.paymentId = payment._id
+   next()
 }
 
 module.exports = makePayment

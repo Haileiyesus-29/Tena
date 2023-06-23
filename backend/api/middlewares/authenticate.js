@@ -3,30 +3,26 @@ const findAccount = require('../helpers/findAccount')
 
 async function authenticate(req, res, next) {
    const token = req.header('Authorization')?.split(' ')[1]
-   if (!token) return next({ message: 'Bad Request', status: 400 })
+   if (!token) return next({ status: 400, errors: ['token is required'] })
 
-   try {
-      const decoded = await jwt.verify(
-         token,
-         process.env.JWT_TOKEN_KEY,
-         (err, data) => {
-            if (err) return
-            return data
-         }
-      )
-      if (!decoded.id) return next({ message: 'Bad Request', status: 400 })
-      const {
-         account: { _id: userId },
-         accType,
-      } = await findAccount({ _id: decoded.id })
+   const decoded = await jwt.verify(
+      token,
+      process.env.JWT_TOKEN_KEY,
+      (err, data) => {
+         if (err) return
+         return data
+      }
+   )
+   if (!decoded?.id) return next({ status: 400, errors: ['invalid token'] })
+   const {
+      account: { _id: userId },
+      accType,
+   } = await findAccount({ _id: decoded.id })
 
-      if (!account) return next({ message: 'Not Found', status: 404 })
-      req.userId = userId
-      req.accType = accType
-      next()
-   } catch (err) {
-      return next({ message: 'Bad Request', status: 400 })
-   }
+   if (!accType) return next({ status: 404 })
+   req.userId = userId
+   req.accType = accType
+   next()
 }
 
 module.exports = authenticate

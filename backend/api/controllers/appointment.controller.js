@@ -2,99 +2,82 @@ const Appointment = require('../models/appointment.model')
 
 // Create a new appointment
 const createAppointment = async (req, res, next) => {
-   try {
-      const { doctor, date, time } = req.body
+   const { doctor, date, time } = req.body
 
-      // Create a new appointment instance
-      const appointment = new Appointment({
-         doctor: doctor,
-         user: req.userId,
-         hospital: req.hospitalId,
-         bill: req.paymentId,
-         date,
-         time,
-      })
+   // Create a new appointment instance
+   const appointment = new Appointment({
+      doctor: doctor,
+      user: req.userId,
+      hospital: req.hospitalId,
+      bill: req.paymentId,
+      date,
+      time,
+   })
 
-      // Save the appointment to the database
-      await appointment.save()
-      res.status(201).json({ appointment })
-   } catch (error) {
-      next(error)
-   }
+   // Save the appointment to the database
+   await appointment.save()
+   if (!appointment) return next({ status: 500 })
+   res.status(201).json({ appointment })
 }
 
 // Get all appointments
 const getAllAppointments = async (req, res, next) => {
-   try {
-      const appointments = await Appointment.find({ [req.accType]: req.userId })
-         .select('date time status')
-         .populate('doctor user hospital', 'name')
+   const appointments = await Appointment.find({ [req.accType]: req.userId })
+      .select('date time status')
+      .populate('doctor user hospital', 'name')
 
-      const formattedAppointments = appointments.map(appointment => {
-         return {
-            id: appointment._id,
-            date: appointment.date,
-            time: appointment.time,
-            status: appointment.status,
-            user_name: appointment?.user?.name,
-            doctor_name: appointment?.doctor?.name,
-            hospital_name: appointment?.hospital?.name,
-         }
-      })
+   const formattedAppointments = appointments.map(appointment => {
+      return {
+         id: appointment._id,
+         date: appointment.date,
+         time: appointment.time,
+         status: appointment.status,
+         user_name: appointment?.user?.name,
+         doctor_name: appointment?.doctor?.name,
+         hospital_name: appointment?.hospital?.name,
+      }
+   })
 
-      res.status(200).json(formattedAppointments)
-   } catch (error) {
-      next(error)
-   }
+   res.status(200).json(formattedAppointments)
 }
 
 // Get appointment by ID
 const getAppointmentById = async (req, res, next) => {
-   try {
-      const appointmentId = req.params.id
-      const appointment = await Appointment.findOne({
-         _id: appointmentId,
-         [req.accType]: req.userId,
-      }).populate('user doctor hospital', '_id name')
+   const appointmentId = req.params.id
+   const appointment = await Appointment.findOne({
+      _id: appointmentId,
+      [req.accType]: req.userId,
+   }).populate('user doctor hospital', '_id name')
 
-      if (!appointment) return next({ message: 'Not found', status: 404 })
+   if (!appointment) return next({ status: 404 })
 
-      const formattedAppointments = {
-         appointment_id: appointment._id,
-         date: appointment.date,
-         time: appointment.time,
-         bill: appointment.bill,
-         status: appointment.status,
-         doctor_id: appointment?.doctor?._id,
-         doctor_name: appointment?.doctor?.name,
-         hospital_id: appointment?.hospital?._id,
-         hospital_name: appointment?.hospital?.name,
-         user_id: appointment?.user?._id,
-         user_name: appointment?.user?.name,
-      }
-
-      res.status(200).json(formattedAppointments)
-   } catch (error) {
-      next(error)
+   const formattedAppointments = {
+      appointment_id: appointment._id,
+      date: appointment.date,
+      time: appointment.time,
+      bill: appointment.bill,
+      status: appointment.status,
+      doctor_id: appointment?.doctor?._id,
+      doctor_name: appointment?.doctor?.name,
+      hospital_id: appointment?.hospital?._id,
+      hospital_name: appointment?.hospital?.name,
+      user_id: appointment?.user?._id,
+      user_name: appointment?.user?.name,
    }
+
+   res.status(200).json(formattedAppointments)
 }
 
 // Delete appointment by ID
 const deleteAppointmentById = async (req, res, next) => {
-   try {
-      const appointmentId = req.params.id
-      const appointment = await Appointment.findOneAndDelete({
-         _id: appointmentId,
-         user: req.userId,
-      })
+   const appointmentId = req.params.id
+   const appointment = await Appointment.findOneAndDelete({
+      _id: appointmentId,
+      user: req.userId,
+   })
 
-      if (!appointment) {
-         return res.status(404).json({ message: 'Appointment not found' })
-      }
-      res.status(204).json({ message: 'Appointment deleted successfully' })
-   } catch (error) {
-      next(error)
-   }
+   if (!appointment) return next({ status: 404 })
+   res.sendStatus(204)
 }
 
 module.exports = {

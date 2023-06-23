@@ -4,9 +4,9 @@ const Doctor = require('../models/doctor.model')
 
 async function findAccount(match) {
    const userPromises = [
-      User.findOne(match).select('-password -created_at'),
-      Hospital.findOne(match).select('-password -created_at'),
-      Doctor.findOne(match).select('-password -created_at'),
+      User.findOne(match).select(' -created_at'),
+      Hospital.findOne(match).select(' -created_at'),
+      Doctor.findOne(match).select(' -created_at'),
    ]
 
    const [user, hospital, doctor] = await Promise.all(userPromises)
@@ -20,6 +20,7 @@ async function findAccount(match) {
    if (doctor) {
       return { account: doctor, accType: 'doctor' }
    }
+   return {}
 }
 
 module.exports = findAccount

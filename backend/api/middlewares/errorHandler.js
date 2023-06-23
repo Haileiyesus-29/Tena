@@ -1,28 +1,30 @@
 function errorHandler(err, req, res, next) {
-   // Default error values
-   let statusCode = 500
-   let message = 'Internal Server Error'
-
-   // Check for specific error properties
-   if (err.statusCode) {
-      statusCode = err.statusCode
+   const { errors, status } = err
+   switch (status) {
+      case 400:
+         return res.status(status).json({ message: 'Bad Request', errors })
+      case 401:
+         return res.status(status).json({ message: 'Unauthorized', errors })
+      case 403:
+         return res.status(status).json({ message: 'Forbidden', errors })
+      case 404:
+         return res.status(status).json({ message: 'Not Found', errors })
+      case 500:
+         return res
+            .status(status)
+            .json({ message: 'Internal Server Failure', errors })
+      default:
+         return next(err)
    }
-
-   if (err.message) {
-      message = err.message
-   }
-
-   // Handle Mongoose validation errors
-   if (err.name === 'ValidationError') {
-      statusCode = 400
-      message = 'Validation Error'
-   }
-
-   // Log the error for debugging (optional)
-   console.error(err)
-
-   // Return the error response
-   res.status(statusCode).json(err)
 }
 
-module.exports = { errorHandler }
+function internalErrorsHanlder(err, req, res, next) {
+   console.log(err)
+   if (err.name === 'CastError')
+      return res
+         .status(400)
+         .json({ message: 'Bad Request', errors: ['invalid id'] })
+   res.status(500).json(err)
+}
+
+module.exports = { errorHandler, internalErrorsHanlder }

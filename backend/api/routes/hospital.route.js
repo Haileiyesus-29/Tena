@@ -10,19 +10,46 @@ const {
    deleteHospital,
 } = require('../controllers/hospital.controller')
 
-// GET all hospitals
+/**
+ * @route  GET /api/hospitals
+ * @description Get all hospitals
+ */
 router.get('/', getAllHospitals)
 
-// GET a single hospital by ID
+/**
+ * @route  GET /api/hospitals/:id
+ * @description Get a single hospital by ID
+ * @param  {string} id - The ID of the hospital
+ */
 router.get('/:id', getHospitalById)
 
-// CREATE a new hospital
+/**
+ * @route  POST /api/hospitals
+ * @description Create a new hospital
+ * @param  {string} contactNumber - The contact number of the hospital
+ * @param  {string} name - The name of the hospital
+ * @param  {string} email - The email of the hospital
+ * @param  {string} address - The address of the hospital
+ * @param  {string} password - The password of the hospital
+ */
 router.post('/', validateForm, createHospital)
 
-// UPDATE a hospital by ID
+/**
+ * @route  PUT /api/hospitals/me
+ * @description Update a hospital by ID
+ * @param  {string} contactNumber - The updated contact number of the hospital
+ * @param  {string} name - The updated name of the hospital
+ * @param  {string} address - The updated address of the hospital
+ * @param  {string} password - The updated password of the hospital
+ * @header  {string} Authorization - Hospital's JWT token
+ */
 router.put('/me', authenticate, updateHospital)
 
-// DELETE a hospital by ID
+/**
+ * @route  DELETE /api/hospitals/me
+ * @description Delete a hospital by ID
+ * @header  {string} Authorization - Hospital's JWT token
+ */
 router.delete('/me', authenticate, deleteHospital)
 
 module.exports = router

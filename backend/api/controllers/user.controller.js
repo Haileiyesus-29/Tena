@@ -6,96 +6,71 @@ const nameValidator = require('../helpers/nameValidator')
 
 // Get all users
 async function getAllUsers(req, res, next) {
-   try {
-      const users = await User.find().select('email name')
-      res.json(users)
-   } catch (error) {
-      next(error)
-   }
+   let skip = req.query.skip || 0
+   let limit = req.query.limit || 10
+   const users = await User.find().select('email name').skip(skip).limit(limit)
+   res.status(200).json(users)
 }
 
 // Create a new user
 async function createUser(req, res, next) {
-   try {
-      const { name, email, password } = req.body
-
-      const hashedPassword = await hashPassword(password)
-      const user = new User({
-         name,
-         email,
-         password: hashedPassword,
-      })
-      await user.save()
-      const token = await generateToken({ id: user._id, accountType: 'user' })
-      res.status(201).json({ message: 'User created successfully', token })
-   } catch (error) {
-      next(error)
-   }
+   const { name, email, password } = req.body
+   const hashedPassword = await hashPassword(password)
+   if (!hashedPassword) return next({ status: 500 })
+   const user = new User({
+      name,
+      email,
+      password: hashedPassword,
+   })
+   await user.save()
+   if (!user) return next({ status: 500 })
+   const token = await generateToken({ id: user._id, accountType: 'user' })
+   if (!token) return next({ status: 500 })
+   res.status(201).json({ message: 'User created successfully', token })
 }
 
 // Get user details
 async function getUser(req, res, next) {
-   try {
-      const userId = req.params.userId
+   const userId = req.params.userId
+   const user = await User.findById(userId).select('email name')
 
-      const user = await User.findById(userId).select('email name')
-
-      if (!user) {
-         const error = new Error('User not found')
-         error.statusCode = 404
-         throw error
-      }
-
-      res.json(user)
-   } catch (error) {
-      next(error)
-   }
+   if (!user) return next({ status: 404 })
+   res.status(200).json(user)
 }
 
 // Update user information
 async function updateUser(req, res, next) {
-   try {
-      const { name, password } = req.body
-      const update = {}
-      let nameErrors = []
-      let passwordErrors = []
+   const { name, password } = req.body
+   const update = {}
+   let nameErrors = []
+   let passwordErrors = []
 
-      if (password) {
-         passwordErrors = passwordValidator(password)
-         update.password = await hashPassword(password)
-      }
-      if (name) {
-         nameErrors = nameValidator(name)
-         update.name = name
-      }
-
-      const errors = [...nameErrors, ...passwordErrors]
-      if (errors.length > 0)
-         return next({ errors, message: 'Bad Request', status: 400 })
-
-      const updatedUser = await User.findByIdAndUpdate(req.userId, update, {
-         new: true,
-      }).select('-password')
-      if (!updatedUser)
-         return next({ message: 'Internal server Error', status: 500 })
-      res.json({ message: 'User updated successfully', user: updatedUser })
-   } catch (error) {
-      next(error)
+   if (password) {
+      passwordErrors = passwordValidator(password)
+      update.password = await hashPassword(password)
    }
+   if (name) {
+      nameErrors = nameValidator(name)
+      update.name = name
+   }
+
+   const errors = [...nameErrors, ...passwordErrors]
+   if (errors.length > 0) return next({ errors, status: 400 })
+
+   const updatedUser = await User.findByIdAndUpdate(req.userId, update, {
+      new: true,
+   }).select('-password')
+   if (!updatedUser) return next({ status: 500 })
+   res.status(201).json({ message: 'Update successful' })
 }
 
 // Delete a user
 async function deleteUser(req, res, next) {
-   try {
-      const deletedUser = await User.findByIdAndDelete(req.userId).select(
-         '-password'
-      )
-      if (!deletedUser)
-         return next({ message: 'Internal server Error', status: 500 })
-      res.status(204).json({ message: 'User deleted successfully' })
-   } catch (error) {
-      next(error)
-   }
+   const deletedUser = await User.findByIdAndDelete(req.userId).select(
+      '-password'
+   )
+   if (!deletedUser) return next({ status: 404 })
+   res.sendStatus(204)
 }
 
 module.exports = {

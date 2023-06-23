@@ -12,10 +12,11 @@ async function validateAccount(req, res, next) {
    }
 
    const { account, accType } = await findAccount({ email })
-   if (!account) return next({ message: 'Bad Request', status: 400 })
+   if (!account) return next({ status: 400 })
+
    const hasCorrectCredential = await bcrypt.compare(password, account.password)
-   if (!hasCorrectCredential)
-      return next({ message: 'Bad Request', status: 400 })
+   if (!hasCorrectCredential) return next({ status: 400 })
+   account.password = undefined
 
    const token = await generateToken({ id: account._id })
    res.status(200).json({ account, accType, token })

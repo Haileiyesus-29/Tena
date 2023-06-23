@@ -2,7 +2,10 @@ require('dotenv').config()
 require('express-async-errors')
 const express = require('express')
 const mongoose = require('mongoose')
-const { errorHandler } = require('./api/middlewares/errorHandler')
+const {
+   errorHandler,
+   internalErrorsHanlder,
+} = require('./api/middlewares/errorHandler')
 
 const app = express()
 const PORT = process.env.SERVER_PORT || 5000
@@ -24,7 +27,9 @@ app.use('/api/appointments', appointmentRoutes)
 app.use('/api/payments', paymentRoutes)
 app.use('/api/messages', messageRoutes)
 app.use('/api/login', loginRoute)
+
 app.use(errorHandler)
+app.use(internalErrorsHanlder)
 
 mongoose
    .connect(process.env.DB_URI)

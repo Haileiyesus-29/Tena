@@ -10,7 +10,16 @@ const {
    deleteAppointmentById,
 } = require('../controllers/appointment.controller')
 
-// Create a new appointment
+/**
+ * @route  POST /api/appointments
+ * @description Create a new appointment
+ * @param  {string} doctor - The ID of the doctor
+ * @param  {string} date - The date of the appointment (YYYY-MM-DD)
+ * @param  {string} time - The time of the appointment
+ * @param  {number} amount - The payment amount
+ * @header  {string} Authorization - User's JWT token
+ * @returns {object} - The created appointment
+ */
 router.post(
    '/',
    authenticate,
@@ -19,13 +28,30 @@ router.post(
    createAppointment
 )
 
-// Get all appointments
+/**
+ * @route  GET /api/appointments
+ * @description Get all appointments
+ * @header  {string} Authorization - User's JWT token
+ * @returns {array} - An array of appointments
+ */
 router.get('/', authenticate, getAllAppointments)
 
-// Get appointment by ID
+/**
+ * @route  GET /api/appointments/:id
+ * @description Get appointment by ID
+ * @param  {string} id - The ID of the appointment
+ * @header  {string} Authorization - User's JWT token
+ * @returns {object} - The requested appointment
+ */
 router.get('/:id', authenticate, getAppointmentById)
 
-// Delete appointment by ID
+/**
+ * @route  DELETE /api/appointments/:id
+ * @description Delete appointment by ID
+ * @param  {string} id - The ID of the appointment
+ * @header  {string} Authorization - User's JWT token
+ * @returns {object} - Success message indicating the appointment is deleted
+ */
 router.delete('/:id', authenticate, deleteAppointmentById)
 
 module.exports = router
