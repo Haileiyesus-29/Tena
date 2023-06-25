@@ -1,3 +1,4 @@
+
 const express = require('express')
 const router = express.Router()
 const validateForm = require('../validations/validateForm')
@@ -67,4 +68,4 @@ router.delete('/:id', authenticate, deleteDoctorById)
  */
 router.delete('/me', authenticate, deleteDoctor)
 
-module.exports = router
+module.exports = router;
