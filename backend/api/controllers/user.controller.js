@@ -22,11 +22,22 @@ async function createUser(req, res, next) {
       email,
       password: hashedPassword,
    })
-   await user.save()
-   if (!user) return next({ status: 500 })
-   const token = await generateToken({ id: user._id, accountType: 'user' })
+   const createdUser = await user.save()
+   if (!createdUser) return next({ status: 500 })
+   createdUser.password = undefined
+
+   const token = await generateToken({ id: user._id })
    if (!token) return next({ status: 500 })
-   res.status(201).json({ message: 'User created successfully', token })
+   res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+   })
+   res.status(201).json({
+      message: 'User created successfully',
+      user: createdUser,
+   })
 }
 
 // Get user details
@@ -34,7 +45,7 @@ async function getUser(req, res, next) {
    const userId = req.params.userId
    const user = await User.findById(userId).select('email name')
 
-   if (!user) return next({ status: 404 })
+   if (!user) return next({ status: 404, errors: ['user does not exist'] })
    res.status(200).json(user)
 }
 
@@ -61,7 +72,8 @@ async function updateUser(req, res, next) {
       new: true,
    }).select('-password')
    if (!updatedUser) return next({ status: 500 })
-   res.status(201).json({ message: 'Update successful' })
+   updatedUser.password = undefined
+   res.status(201).json({ message: 'Update successful', user: updatedUser })
 }
 
 // Delete a user
@@ -69,7 +81,7 @@ async function deleteUser(req, res, next) {
    const deletedUser = await User.findByIdAndDelete(req.userId).select(
       '-password'
    )
-   if (!deletedUser) return next({ status: 404 })
+   if (!deletedUser) return next({ status: 500 })
    res.sendStatus(204)
 }
 

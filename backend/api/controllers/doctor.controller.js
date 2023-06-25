@@ -7,7 +7,12 @@ const nameValidator = require('../helpers/nameValidator')
 
 // Get all doctors
 async function getAllDoctors(req, res, next) {
-   const doctors = await Doctor.find().select('-password')
+   const skip = req.query?.skip || 0
+   const limit = req.query?.limit || 10
+   const doctors = await Doctor.find()
+      .select('-password')
+      .skip(skip)
+      .limit(limit)
    res.status(200).json(doctors)
 }
 
@@ -15,7 +20,7 @@ async function getAllDoctors(req, res, next) {
 async function getDoctorById(req, res, next) {
    const { id } = req.params
    const doctor = await Doctor.findById(id).select('-password')
-   if (!doctor) return next({ status: 404 })
+   if (!doctor) return next({ status: 404, errors: ['account does not exist'] })
    res.status(200).json(doctor)
 }
 
@@ -37,10 +42,16 @@ async function createDoctor(req, res, next) {
       password: hashedPassword,
       hospital: hospital._id,
    })
-   await doctor.save()
-   if (!doctor) return next({ status: 500 })
+   const createdDoctor = await doctor.save()
+   if (!createdDoctor) return next({ status: 500 })
    const token = await generateToken({ id: doctor._id })
-   res.status(201).json({ token })
+   res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+   })
+   res.status(201).json({ doctor: createdDoctor })
 }
 
 // Update a doctor by ID
@@ -74,7 +85,7 @@ async function updateDoctor(req, res, next) {
 // Delete own doctor account
 async function deleteDoctor(req, res, next) {
    const doctor = await Doctor.findByIdAndDelete(req.userId)
-   if (!doctor) return next({ status: 404 })
+   if (!doctor) return next({ status: 500 })
    res.sendStatus(204)
 }
 
@@ -85,7 +96,11 @@ async function deleteDoctorById(req, res, next) {
    const { id } = req.params
 
    const doctor = await Doctor.findOneAndDelete({ hospital: id })
-   if (!doctor) return next({ status: 404 })
+   if (!doctor)
+      return next({
+         status: 403,
+         errors: ['can not delete account of non employee'],
+      })
    res.sendStatus(204)
 }
 

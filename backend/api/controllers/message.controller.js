@@ -66,14 +66,16 @@ const getMessageThread = async (req, res, next) => {
       .skip(skip)
       .limit(limit)
 
-   if (!chatHistory) return next({ status: 404 })
+   if (!chatHistory)
+      return next({ status: 404, errors: ['messages not found'] })
    res.status(200).json(chatHistory)
 }
 
 // POST a new message
 const createMessage = async (req, res, next) => {
    const receiver = await User.findById(req.params.id)
-   if (!receiver) return next({ status: 404 })
+   if (!receiver)
+      return next({ status: 404, errors: ['message receiver not found'] })
 
    const message = new Message({
       sender: req.user._id,

@@ -2,9 +2,7 @@ const jwt = require('jsonwebtoken')
 const findAccount = require('../helpers/findAccount')
 
 async function authenticate(req, res, next) {
-   const token = req.header('Authorization')?.split(' ')[1]
-   if (!token) return next({ status: 400, errors: ['token is required'] })
-
+   const { jwt: token } = req.cookies
    const decoded = await jwt.verify(
       token,
       process.env.JWT_TOKEN_KEY,
@@ -19,7 +17,7 @@ async function authenticate(req, res, next) {
       accType,
    } = await findAccount({ _id: decoded.id })
 
-   if (!accType) return next({ status: 404 })
+   if (!accType) return next({ status: 404, errors: ['account does not exit'] })
    req.userId = userId
    req.accType = accType
    next()

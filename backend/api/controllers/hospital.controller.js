@@ -6,7 +6,12 @@ const nameValidator = require('../helpers/nameValidator')
 
 // Get all hospitals
 async function getAllHospitals(req, res, next) {
-   const hospitals = await Hospital.find().select('-password')
+   const skip = req.query?.skip || 0
+   const limit = req.query?.limit || 10
+   const hospitals = await Hospital.find()
+      .select('-password')
+      .skip(skip)
+      .limit(limit)
    res.status(200).json(hospitals)
 }
 
@@ -14,7 +19,8 @@ async function getAllHospitals(req, res, next) {
 async function getHospitalById(req, res, next) {
    const { id } = req.params
    const hospital = await Hospital.findById(id).select('-password')
-   if (!hospital) return next({ status: 404 })
+   if (!hospital)
+      return next({ status: 404, errors: ['account does not exist'] })
    res.status(200).json(hospital)
 }
 
@@ -38,14 +44,20 @@ async function createHospital(req, res, next) {
       password: hashedPassword,
    })
 
-   await hospital.save()
-   if (!hospital) return next({ status: 500 })
+   const createdHospital = await hospital.save()
+   if (!createdHospital) return next({ status: 500 })
+   createdHospital.password = undefined
 
    const token = await generateToken({ id: hospital._id })
    if (!token) return next({ status: 500 })
 
-   hospital.password = undefined
-   res.status(201).json({ token })
+   res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+   })
+   res.status(201).json({ hospital: createdHospital })
 }
 
 // Update a hospital by ID
@@ -73,13 +85,13 @@ async function updateHospital(req, res, next) {
 
    const hospital = await Hospital.findByIdAndUpdate(req.userId, update)
    if (!hospital) return next({ status: 500 })
-   res.status(201).json({ message: 'update successful' })
+   res.status(201).json({ hospital })
 }
 
 // Delete a hospital by ID
 async function deleteHospital(req, res, next) {
    const hospital = await Hospital.findByIdAndDelete(req.userId)
-   if (!hospital) return next({ status: 404 })
+   if (!hospital) return next({ status: 500 })
    res.sendStatus(204)
 }
 
