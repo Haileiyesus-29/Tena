@@ -34,7 +34,7 @@ app.get('/api/logout', (req, res) => {
       httpOnly: true,
       expires: new Date(0),
    })
-   res.statusCode(200).json({ message: 'Logged out successfully' })
+   res.status(200).json({ message: 'Logged out successfully' })
 })
 
 app.use(errorHandler)

@@ -26,11 +26,12 @@ router.get('/:id', getHospitalById)
 /**
  * @route  POST /api/hospitals
  * @description Create a new hospital
- * @param  {string} contactNumber - The contact number of the hospital
+ * @param  {string} contact - The contact number of the hospital
  * @param  {string} name - The name of the hospital
  * @param  {string} email - The email of the hospital
  * @param  {string} address - The address of the hospital
  * @param  {string} password - The password of the hospital
+ * @param  {string} image - The image of the hospital (optional)
  */
 router.post('/', validateForm, createHospital)
 
@@ -41,7 +42,8 @@ router.post('/', validateForm, createHospital)
  * @param  {string} name - The updated name of the hospital
  * @param  {string} address - The updated address of the hospital
  * @param  {string} password - The updated password of the hospital
- * @header  {string} Authorization - Hospital's JWT token
+ * @param  {string} image - The updated image of the hospital
+ * @header  {string} Authorization - Hospital's JWT toke n
  */
 router.put('/me', authenticate, updateHospital)
 

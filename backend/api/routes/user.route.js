@@ -22,6 +22,7 @@ router.get('/', getAllUsers)
  * @param  {string} name - The name of the user
  * @param  {string} email - The email of the user
  * @param  {string} password - The password of the user
+ * @param  {string} image - The image of the user
  */
 router.post('/', validateForm, createUser)
 
@@ -37,6 +38,7 @@ router.get('/:userId', getUser)
  * @description Update user information
  * @param  {string} name - The name of the user
  * @param  {string} password - The password of the user
+ * @param  {string} image - The image of the user
  * @header  {string} Authorization - User's JWT token
  */
 router.put('/me', authenticate, updateUser)

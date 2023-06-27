@@ -26,10 +26,10 @@ async function getHospitalById(req, res, next) {
 
 // Create a new hospital
 async function createHospital(req, res, next) {
-   const { name, email, address, contactNumber, password } = req.body
+   const { name, email, address, contact, password, image } = req.body
    const errors = []
    if (!address) errors.push('address is required')
-   if (!contactNumber) errors.push('contact is required')
+   if (!contact) errors.push('contact is required')
 
    if (errors.length) return next({ status: 400, errors })
 
@@ -40,8 +40,9 @@ async function createHospital(req, res, next) {
       name,
       email,
       address,
-      contactNumber,
+      contact,
       password: hashedPassword,
+      image,
    })
 
    const createdHospital = await hospital.save()
@@ -62,9 +63,9 @@ async function createHospital(req, res, next) {
 
 // Update a hospital by ID
 async function updateHospital(req, res, next) {
-   const { name, password, address, contactNumber } = req.body
+   const { name, password, address, contact, image } = req.body
 
-   const update = {}
+   const update = { image }
    let nameErrors = []
    let passwordErrors = []
 
@@ -78,7 +79,7 @@ async function updateHospital(req, res, next) {
    }
    if (name) update.name = name
    if (address) update.address = address
-   if (contactNumber) update.contactNumber = contactNumber
+   if (contact) update.contact = contact
 
    const errors = [...nameErrors, ...passwordErrors]
    if (errors.length > 0) return next({ errors, status: 400 })

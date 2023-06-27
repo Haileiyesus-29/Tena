@@ -9,7 +9,9 @@ const nameValidator = require('../helpers/nameValidator')
 async function getAllDoctors(req, res, next) {
    const skip = req.query?.skip || 0
    const limit = req.query?.limit || 10
-   const doctors = await Doctor.find()
+   const doctors = await Doctor.find({
+      hospital: req.userId,
+   })
       .select('-password')
       .skip(skip)
       .limit(limit)
@@ -26,21 +28,19 @@ async function getDoctorById(req, res, next) {
 
 // Create a new doctor
 async function createDoctor(req, res, next) {
-   const { name, email, specialty, password } = req.body
-   if (!specialty)
+   const { name, email, speciality, password } = req.body
+   if (!speciality)
       return next({ status: 400, errors: ['speciality is required'] })
 
    const hashedPassword = await hashPassword(password)
    if (!hashedPassword) return next({ status: 500 })
 
-   const hospital = await Hospital.findById(req.userId)
-   if (!hospital) return next({ status: 404 })
    const doctor = new Doctor({
       name,
       email,
-      specialty,
+      speciality,
       password: hashedPassword,
-      hospital: hospital._id,
+      hospital: req.userId,
    })
    const createdDoctor = await doctor.save()
    if (!createdDoctor) return next({ status: 500 })
@@ -56,7 +56,7 @@ async function createDoctor(req, res, next) {
 
 // Update a doctor by ID
 async function updateDoctor(req, res, next) {
-   const { name, password, specialty } = req.body
+   const { name, password, speciality } = req.body
 
    const update = {}
    let nameErrors = []
@@ -71,15 +71,16 @@ async function updateDoctor(req, res, next) {
       update.name = name
    }
    if (name) update.name = name
-   if (specialty) update.specialty = specialty
+   if (speciality) update.speciality = speciality
 
    const errors = [...nameErrors, ...passwordErrors]
    if (errors.length > 0) return next({ errors, status: 400 })
 
    const doctor = await Doctor.findByIdAndUpdate(req.userId, update)
-   if (!doctor) return next({ status: 500 })
+   if (!doctor) return next({ status: 404, errors: ['account does not exist'] })
+   doctor.password = undefined
 
-   res.status(201).json({ message: 'update successful' })
+   res.status(201).json({ message: 'update successful', account: doctor })
 }
 
 // Delete own doctor account
@@ -91,11 +92,15 @@ async function deleteDoctor(req, res, next) {
 
 // Delete doctor account for hospital
 async function deleteDoctorById(req, res, next) {
-   if (req.accType !== 'hospital') return next({ status: 403 })
+   if (req.accType !== 'hospital')
+      return next({ status: 403, errors: ['can not delete another account'] })
 
    const { id } = req.params
 
-   const doctor = await Doctor.findOneAndDelete({ hospital: id })
+   const doctor = await Doctor.findOneAndDelete({
+      hospital: req.userId,
+      _id: id,
+   })
    if (!doctor)
       return next({
          status: 403,

@@ -23,9 +23,13 @@ const hospitalSchema = new mongoose.Schema(
          type: String,
          required: true,
       },
-      contactNumber: {
+      contact: {
          type: String,
          required: true,
+      },
+      image: {
+         type: String,
+         default: null,
       },
    },
    { versionKey: false }

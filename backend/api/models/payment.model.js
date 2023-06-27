@@ -20,12 +20,8 @@ const paymentSchema = new mongoose.Schema(
          type: String,
          default: 'telebirr',
       },
-      timestamp: {
-         type: Date,
-         default: () => Date.now(),
-      },
    },
-   { versionKey: false }
+   { versionKey: false, timestamps: true }
 )
 
 module.exports = mongoose.model('Payment', paymentSchema)

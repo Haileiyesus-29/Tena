@@ -8,7 +8,7 @@ const doctorSchema = new mongoose.Schema(
          minlength: 3,
          maxlength: 30,
       },
-      specialty: {
+      speciality: {
          type: String,
          required: true,
       },
@@ -29,6 +29,10 @@ const doctorSchema = new mongoose.Schema(
          required: true,
          minlength: 8,
          maxlength: 100,
+      },
+      image: {
+         type: String,
+         default: null,
       },
    },
    { versionKey: false }

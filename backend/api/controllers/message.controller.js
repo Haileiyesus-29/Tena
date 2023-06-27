@@ -1,54 +1,27 @@
 const Message = require('../models/message.model')
 const User = require('../models/user.model')
 
-// GET a list of message threads
 const getAllMessages = async (req, res, next) => {
    const skip = +req.query?.skip || 0
    const limit = +req.query?.limit || 5
 
-   const messages = await Message.aggregate([
-      {
-         $match: {
-            $or: [{ sender: req.user._id }, { receiver: req.user._id }],
-         },
-      },
-      {
-         $sort: { timestamp: 1 }, // Sort by timestamp in descending order
-      },
-      {
-         $lookup: {
-            from: 'users',
-            let: { sender: '$sender', receiver: '$receiver' },
-            pipeline: [
-               {
-                  $match: {
-                     $expr: {
-                        $or: [
-                           { $eq: ['$_id', '$$sender'] },
-                           { $eq: ['$_id', '$$receiver'] },
-                        ],
-                     },
-                  },
-               },
-            ],
-            as: 'chattedAccounts',
-         },
-      },
-      {
-         $unwind: '$chattedAccounts',
-      },
-      {
-         $group: {
-            _id: '$chattedAccounts._id',
-            accountName: { $first: '$chattedAccounts.name' },
-            accountEmail: { $first: '$chattedAccounts.email' },
-         },
-      },
-      { $skip: skip },
-      { $limit: limit },
-   ])
+   const messages = await Message.find({
+      $or: [{ sender: req.userId }, { receiver: req.userId }],
+   })
+   const accounts = messages.map(message =>
+      message.sender == req.userId
+         ? message.receiver.toString()
+         : message.sender.toString()
+   )
 
-   res.status(200).json(messages)
+   const response = await User.find({
+      _id: { $in: [...new Set(accounts)] },
+   })
+      .select('-password')
+      .skip(skip)
+      .limit(limit)
+
+   res.status(200).json(response)
 }
 
 // GET all message thread with user
@@ -58,8 +31,8 @@ const getMessageThread = async (req, res, next) => {
 
    const chatHistory = await Message.find({
       $or: [
-         { sender: req.user._id, receiver: req.params?.id },
-         { sender: req.params?.id, receiver: req.user._id },
+         { sender: req.userId, receiver: req.params?.receiverId },
+         { sender: req.params?.receiverId, receiver: req.userId },
       ],
    })
       .sort({ timestamp: 1 })
@@ -73,12 +46,12 @@ const getMessageThread = async (req, res, next) => {
 
 // POST a new message
 const createMessage = async (req, res, next) => {
-   const receiver = await User.findById(req.params.id)
+   const receiver = await User.findById(req.params.receiverId)
    if (!receiver)
       return next({ status: 404, errors: ['message receiver not found'] })
 
    const message = new Message({
-      sender: req.user._id,
+      sender: req.userId,
       receiver,
       content: req.body.content,
    })

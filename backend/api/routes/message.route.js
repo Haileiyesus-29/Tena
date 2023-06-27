@@ -6,6 +6,7 @@ const {
    createMessage,
    getMessageThread,
 } = require('../controllers/message.controller')
+const validateMessage = require('../validations/validateMessage')
 
 /**
  * @route  GET /api/messages/:receiverId
@@ -29,6 +30,6 @@ router.get('/', authenticate, getAllMessages)
  * @param  {string} content - The content of the message
  * @header  {string} Authorization - User's JWT token
  */
-router.post('/:receiverId', authenticate, createMessage)
+router.post('/:receiverId', authenticate, validateMessage, createMessage)
 
 module.exports = router

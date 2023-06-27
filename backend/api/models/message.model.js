@@ -14,20 +14,13 @@ const messageSchema = new mongoose.Schema(
       },
       content: {
          type: String,
-         required: true,
       },
-      timestamp: {
-         type: Date,
-         default: () => Date.now(),
+      media: {
+         type: String,
+         default: null,
       },
    },
-   { versionKey: false }
+   { versionKey: false, timestamps: true }
 )
 
-messageSchema.set('toJSON', {
-   transform: (_, obj) => {
-      obj.id = obj._id
-      delete obj._id
-   },
-})
 module.exports = mongoose.model('Message', messageSchema)

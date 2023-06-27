@@ -12,13 +12,11 @@ async function authenticate(req, res, next) {
       }
    )
    if (!decoded?.id) return next({ status: 400, errors: ['invalid token'] })
-   const {
-      account: { _id: userId },
-      accType,
-   } = await findAccount({ _id: decoded.id })
+   const { account, accType } = await findAccount({ _id: decoded.id })
 
-   if (!accType) return next({ status: 404, errors: ['account does not exit'] })
-   req.userId = userId
+   if (!accType || !account)
+      return next({ status: 404, errors: ['account does not exit'] })
+   req.userId = account?.id
    req.accType = accType
    next()
 }

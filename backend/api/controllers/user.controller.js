@@ -8,18 +8,22 @@ const nameValidator = require('../helpers/nameValidator')
 async function getAllUsers(req, res, next) {
    let skip = req.query.skip || 0
    let limit = req.query.limit || 10
-   const users = await User.find().select('email name').skip(skip).limit(limit)
+   const users = await User.find()
+      .select('email name image')
+      .skip(skip)
+      .limit(limit)
    res.status(200).json(users)
 }
 
 // Create a new user
 async function createUser(req, res, next) {
-   const { name, email, password } = req.body
+   const { name, email, password, image } = req.body
    const hashedPassword = await hashPassword(password)
    if (!hashedPassword) return next({ status: 500 })
    const user = new User({
       name,
       email,
+      image,
       password: hashedPassword,
    })
    const createdUser = await user.save()
@@ -36,14 +40,14 @@ async function createUser(req, res, next) {
    })
    res.status(201).json({
       message: 'User created successfully',
-      user: createdUser,
+      account: createdUser,
    })
 }
 
 // Get user details
 async function getUser(req, res, next) {
    const userId = req.params.userId
-   const user = await User.findById(userId).select('email name')
+   const user = await User.findById(userId).select('email name image')
 
    if (!user) return next({ status: 404, errors: ['user does not exist'] })
    res.status(200).json(user)
@@ -51,8 +55,8 @@ async function getUser(req, res, next) {
 
 // Update user information
 async function updateUser(req, res, next) {
-   const { name, password } = req.body
-   const update = {}
+   const { name, password, image } = req.body
+   const update = { image }
    let nameErrors = []
    let passwordErrors = []
 

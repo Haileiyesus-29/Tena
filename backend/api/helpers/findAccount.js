@@ -4,9 +4,9 @@ const Doctor = require('../models/doctor.model')
 
 async function findAccount(match) {
    const userPromises = [
-      User.findOne(match).select(' -created_at'),
-      Hospital.findOne(match).select(' -created_at'),
-      Doctor.findOne(match).select(' -created_at'),
+      User.findOne(match),
+      Hospital.findOne(match),
+      Doctor.findOne(match),
    ]
 
    const [user, hospital, doctor] = await Promise.all(userPromises)
