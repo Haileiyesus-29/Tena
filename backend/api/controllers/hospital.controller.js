@@ -76,6 +76,7 @@ async function updateHospital(req, res, next) {
    if (name) {
       nameErrors = nameValidator(name)
       update.name = name
+
    }
    if (name) update.name = name
    if (address) update.address = address
