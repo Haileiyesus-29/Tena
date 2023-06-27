@@ -12,6 +12,7 @@ import { TfiTime } from "react-icons/tfi";
 import Footer from "./Footer";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
+import { useState, useEffect } from "react";
 
 const myImage = require("../assets/hematology.png");
 const doc = require("../assets/docfemale.png");
@@ -21,6 +22,18 @@ const ambulance = require("../assets/ambulance.png");
 const pharmacy = require("../assets/drugs.png");
 const stereoscope = require("../assets/stereoscope.png");
 function Home() {
+  const [data, setData] = useState([{}]);
+  async function getDoctors() {
+    await fetch(" http://localhost:5000/api/doctors/", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((json) => setData(json.data));
+  }
+
+  useEffect(() => {
+    getDoctors();
+  }, []);
   return (
     <>
       <Navbar />
@@ -49,7 +62,7 @@ function Home() {
               fontFamily: "Inter",
               fontSize: "5rem",
               textTransform: "uppercase",
-              color:"#183260"
+              color: "#183260",
             }}
           >
             Your Health is Our Priority
@@ -61,7 +74,10 @@ function Home() {
             advice, and prescription refills to help you manage your health from
             the comfort of your own home. <br />
             <Link to="/about">
-              <Button variant="outlined"  sx={{ borderWidth: 2,margin:'20px' }} >
+              <Button
+                variant="outlined"
+                sx={{ borderWidth: 2, margin: "20px" }}
+              >
                 Read more...
               </Button>
             </Link>
@@ -308,7 +324,7 @@ function Home() {
               image={pharmacy}
             />
 
-            <Typography variant="h5">Ambulance Service</Typography>
+            <Typography variant="h5">Hematology</Typography>
             <Typography variant="body1">
               Ease your pain and soothe your joints
             </Typography>
@@ -323,7 +339,7 @@ function Home() {
               image={ambulance}
             />
 
-            <Typography variant="h5">Hematology</Typography>
+            <Typography variant="h5">Ambulance Service</Typography>
             <Typography variant="body1">
               Ease your pain and soothe your joints
             </Typography>
@@ -331,45 +347,45 @@ function Home() {
         </Stack>
       </Stack>
       <Stack>
-      <Typography
-        variant="h2"
-        sx={{
-          fontFamily: "san serif",
-          fontSize: "3rem",
-          textTransform: "uppercase",
-          textAlign: "center",
-          color: "#10203D",
-        }}
-      >
-        Our Qualified Doctors
-      </Typography>
-      <Stack m={"20px"}>
-        <Card sx={{ maxWidth: 345 }}>
-          <CardMedia
-            component="img"
-            sx={{ height: 400 }}
-            image="https://img.freepik.com/free-photo/portrait-experienced-professional-therapist-with-stethoscope-looking-camera_1098-19305.jpg?size=626&ext=jpg&ga=GA1.1.1624204321.1680518598&semt=ais"
-          />
-          <CardContent>
-            <Typography
-              gutterBottom
-              variant="h4"
-              component="div"
-              sx={{ fontWeight: "700" }}
-            >
-              Dr. John Smith
-            </Typography>
-            <Typography variant="h5" style={{ color: "#1B3C74" }}>
-              Cardologist
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum
-              fuga quas voluptatum
-            </Typography>
-          </CardContent>
-        </Card>
+        <Typography
+          variant="h2"
+          sx={{
+            fontFamily: "san serif",
+            fontSize: "3rem",
+            textTransform: "uppercase",
+            textAlign: "center",
+            color: "#10203D",
+          }}
+        >
+          Our Qualified Doctors
+        </Typography>
+        <Stack m={"20px"}>
+          {data &&
+            data.map((doc) => (
+              <Card sx={{ maxWidth: 345 }}>
+                <CardContent>
+                  <Typography
+                    gutterBottom
+                    variant="h4"
+                    component="div"
+                    sx={{ fontWeight: "700" }}
+                  >
+                    {doc.name}
+                  </Typography>
+                  <Typography variant="h5" style={{ color: "#1B3C74" }}>
+                    {doc.specialty}
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    style={{ color: "#2AA7FF", fontStyle: "italic" }}
+                  >
+                    {doc.email}
+                  </Typography>
+                </CardContent>
+              </Card>
+            ))}
+        </Stack>
       </Stack>
-    </Stack>
       <Footer />
     </>
   );

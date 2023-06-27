@@ -7,14 +7,21 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { Popup } from "reactjs-popup";
+import { useEffect, useState } from "react";
 import "reactjs-popup/dist/index.css";
-import Delete from "./Delete";
-import ProfileUpdate from "./ProfileUpdate";
+import axios from "axios";
 function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const [data, setData] = useState([]);
+  async function getHospitals() {
+    let res = await axios.get("http://localhost:5000/api/hospitals/");
+    if (res.status === 200) {
+      setData(res.data);
+    }
+  }
+  useEffect(() => {
+    getHospitals();
+  }, []);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -40,24 +47,15 @@ function Navbar() {
       <Typography
         sx={{ flexGrow: 0.25, fontFamily: "sans-serif", fontSize: "1.25rem" }}
       >
-        <Link to="/" className="link-headeradmin">
+        <Link to="/hospital" className="link-headeradmin">
           Home
         </Link>
       </Typography>
-
-      {/* <Typography
-        sx={{ flexGrow: 0.25, fontFamily: "sans-serif", fontSize: "1.25rem" }}
-        color={"black"}
-      >
-        <Link to="/about" className="link-headeradmin">
-          About
-        </Link>
-      </Typography> */}
       <Typography
         sx={{ flexGrow: 0.25, fontFamily: "sans-serif", fontSize: "1.25rem" }}
         color={"black"}
       >
-        <Link to="/contactus" className="link-headeradmin">
+        <Link to="/listofappointment" className="link-headeradmin">
           Appointments
         </Link>
       </Typography>
@@ -66,6 +64,7 @@ function Navbar() {
         color={"black"}
       >
         <IconButton onClick={handleClick}>
+          {/* {data.name[0]} */}
           <Avatar sx={{ background: "#183260", fontSize: "30px" }}>H</Avatar>
         </IconButton>
         <Menu
@@ -73,7 +72,7 @@ function Navbar() {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <Popup
+          {/* <Popup
             trigger={<MenuItem onClick={handleClose}>Update Profile</MenuItem>}
             modal
             nested
@@ -81,28 +80,20 @@ function Navbar() {
             {(close) => (
               <div className="modal">
                 <div className="content">
-                  <ProfileUpdate close={close} />
+                <ProfileUpdate close={close} />
                 </div>
               </div>
             )}
-          </Popup>
-
-          <Link to="/login" className="link-nav">
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+          </Popup> */}
+          <Link to={`/viewprofile/${data.id}`} className="link-nav">
+            <MenuItem onClose={handleClose}>View Profile</MenuItem>
           </Link>
-          <Popup
-            trigger={<MenuItem onClick={handleClose}>Delete Account</MenuItem>}
-            modal
-            nested
-          >
-            {(close) => (
-              <div className="modal">
-                <div className="content">
-                  <Delete close={close} />
-                </div>
-              </div>
-            )}
-          </Popup>
+          <Link to={`/updateprofile/${data.id}`} className="link-nav">
+            <MenuItem onClose={handleClose}>Update Profile</MenuItem>
+          </Link>
+          <Link to="/login" className="link-nav">
+            <MenuItem onClose={handleClose}>Logout</MenuItem>
+          </Link>
         </Menu>
       </Typography>
     </Toolbar>

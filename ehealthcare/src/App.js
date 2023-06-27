@@ -16,6 +16,7 @@ import ListOfAppointment from "./Component/Admin/ListOfAppointment";
 import UpdateDoctor from "./Component/Admin/UpdateDoctor";
 import ProfileUpdate from "./Component/Admin/ProfileUpdate";
 import Delete from "./Component/Admin/Delete";
+import ProfileView from "./Component/Admin/ProfileView";
 
 function App() {
   return (
@@ -28,14 +29,15 @@ function App() {
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/login" element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
-        <Route path='/detail' element={<Detail/>}/>
+        <Route path='/detail/:id' element={<Detail/>}/>
         <Route path='/doctors' element={<Doctors/>}/>
         <Route path='/payment' element={<Payment/>}/>
         <Route path='/hospital' element={<AdminHome/>}/>
         <Route path='/adddoctor' element={<AddDoctor/>}/>
         <Route path="/listofappointment" element={<ListOfAppointment/>}/>
         <Route path="/updatedoctor/:id" element={<UpdateDoctor/>}/>
-        <Route path ="/updateprofile/" element={<ProfileUpdate/>}/>
+        <Route path ="/updateprofile/:id" element={<ProfileUpdate/>}/>
+        <Route path="/viewprofile/:id" element={<ProfileView/>}/>
         <Route path="/delete/" element={<Delete/>}/>
       </Routes>
     </BrowserRouter>

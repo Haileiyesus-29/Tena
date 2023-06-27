@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Stack, Box, Typography, Button, TextField } from "@mui/material";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 const StyledInput = styled(TextField)`
   width: 100%;
   & .MuiOutlinedInput-notchedOutline {
@@ -22,35 +21,41 @@ const StyledInput = styled(TextField)`
 `;
 function Login() {
   const [data, setData] = useState({
-    name:"",
+    name: "",
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
-    console.log(data);
     e.preventDefault();
-
-    try {
-      
-      await axios.post("http://localhost:5000/api/login", {
-        method:'POST',
-        header:{
-          'Content-Type':'application/json'
-        },
-        body: JSON.stringify({
-          data
+    if (data.email && data.password) {
+      fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            setError("Invalid email or password");
+          } else {
+            console.log(response.json());
+            navigate("/");
+          }
+          return response.json();
         })
-      });
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        setError(error.response.data.message);
-      }
+        .then((res) => console.log(res))
+        .catch((error) => {
+          if (
+            error.response &&
+            error.response.status >= 400 &&
+            error.response.status <= 500
+          ) {
+            setError(error.response.data.message);
+          }
+        });
+    } else {
+      setError("Input Values Can Not be Empty");
     }
   };
   const handleChange = (e) => {
@@ -80,10 +85,28 @@ function Login() {
         <Typography variant="h3" style={{ color: "white" }} m={"20px"}>
           Login
         </Typography>
+
         <form onSubmit={handleSubmit}>
-          <></>
-        <Stack spacing={3} m={"30px"}>
-            <StyledInput
+          <Stack spacing={3} m={"30px"}>
+            {error ? (
+              <Box
+                style={{
+                  background: "red",
+                  padding: "10px",
+                  borderRadius: "10px",
+                }}
+              >
+                <Typography
+                  varaint="subtitle"
+                  style={{ color: "white", fontSize: "18px" }}
+                >
+                  {error}
+                </Typography>
+              </Box>
+            ) : (
+              ""
+            )}
+            {/* <StyledInput
               id="outlined-name"
               label="Name"
               type="text"
@@ -92,7 +115,7 @@ function Login() {
               onChange={handleChange}
               margin="normal"
               variant="outlined"
-            />
+            /> */}
             <StyledInput
               id="outlined-email"
               label="Email"
@@ -113,7 +136,6 @@ function Login() {
               margin="normal"
               variant="outlined"
             />
-            {error && <div>{error}</div>}
             <Button
               variant="contained"
               sx={{ m: 4, p: 1.5 }}

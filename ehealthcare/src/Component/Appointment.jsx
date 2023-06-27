@@ -1,28 +1,59 @@
-import React, { useEffect ,useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   Stack,
   TextField,
-  TextareaAutosize,
   Typography,
   Select,
   MenuItem,
   Button,
 } from "@mui/material";
 import Navbar from "./Navbar";
-import { Link } from "react-router-dom";
 function Appointment() {
   const [displayText, setDisplayText] = useState(true);
+  const [appointment, setAppointment] = useState([{}]);
+  const [datetime, setdateTime] = useState("");
+  const [user, setUser] = useState([]);
+  const [amount, setAmount] = useState("");
+  const [doctor, setDoctor] = useState("");
+  const handleChange = (e) => {
+    setdateTime(e.target.value);
+  };
   const handleClick = () => {
     setDisplayText(!displayText);
   };
-  const [user,setUser] = useState([])
 useEffect(()=>{
-  fetch("http://localhost:5000/api/doctors",{
-    method:'GET'
+  fetch("http://localhost:5000/api/appointments/", {
+    method: "GET",
   })
-  .then((res)=>res.json())
-  .then((data)=>setUser(data.data))
+    .then((res) => res.json())
+    .then((json) => setAppointment(json.data));
+
 },[])
+  
+  useEffect(() => {
+    fetch("http://localhost:5000/api/doctors/", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => setUser(data.data));
+  }, []);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const date = datetime.substring(0, 10);
+    const time = datetime.substring(11);
+    const data = { date, time };
+    fetch("http://localhost:5000/api/appointments/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        data,
+        user,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+  }
   return (
     <>
       <Navbar />
@@ -35,7 +66,6 @@ useEffect(()=>{
           backgroundImage: `url("https://img.freepik.com/free-photo/happy-general-practitioner-talking-senior-man-while-shaking-hands-with-him-during-home-visit_637285-1393.jpg?size=626&ext=jpg&ga=GA1.1.1624204321.1680518598&semt=sph")`,
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
-          
         }}
       >
         <Stack m={"70px"}>
@@ -55,24 +85,40 @@ useEffect(()=>{
       <Stack direction={"row"} width={"100%"} justifyContent={"space-between"}>
         <Stack>
           <Stack ml={"15vh"} mt={"50px"} spacing={3} width={"70vh"}>
-            <TextField type="datetime-local" />
-            <Select label="Doctors">
-              {user&& user.map((doc)=>(
-                 <MenuItem value={doc.name}>{doc.name}</MenuItem>
-              ))}
-              {/* <MenuItem value={"Dr Jhon Smith"}>Dr Jhon Smith</MenuItem>
-              <MenuItem value={"Dr John Smith"}>Dr Cristina Arun</MenuItem>
-              <MenuItem value={"Dr John Smith"}>Dr Mathew Doe</MenuItem> */}
+            <TextField
+              type="datetime-local"
+              value={datetime}
+              onChange={handleChange}
+            />
+            <Select
+              label="Doctors"
+              value={doctor}
+              onChange={(e) => setDoctor(e.target.value)}
+            >
+              {user &&
+                user.map((doc) => (
+                  <MenuItem value={doc.name}>{doc.name}</MenuItem>
+                ))}
             </Select>
-            <TextareaAutosize
+            <TextField
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+            {/* <TextareaAutosize
               placeholder="Anything you want to add"
               minRows={5}
-            ></TextareaAutosize>
-           
-              <Button variant="contained" sx={{ m: 4, p: 1.5 }}>
-               <Link to="/detail" className="link-header">  Schedule Now</Link>
-              </Button>
-            
+            ></TextareaAutosize> */}
+
+            <Button
+              variant="contained"
+              sx={{ m: 4, p: 1.5 }}
+              onClick={handleSubmit}
+            >
+              {/* <Link to={`/detail/${1}`} className="link-header"> */}
+                Schedule Now
+              {/* </Link> */}
+            </Button>
           </Stack>
         </Stack>
         <Stack width={"50%"} mb={"40px"}>

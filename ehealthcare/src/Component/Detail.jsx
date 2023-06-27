@@ -34,16 +34,14 @@ function Detail() {
                 <Typography variant="h5">Phone Number</Typography>
                 <Typography variant="h5">Email</Typography>
                 <Typography variant="h5">Date/Time</Typography>
-                <Typography variant="h5">Type of Apponitment</Typography>
                 <Typography variant="h5">Your Doctor</Typography>
-                <Typography variant="h5">Services</Typography>
+                <Typography variant="h5">Service</Typography>
               </Stack>
               <Stack spacing={4}>
                 <Typography variant="h6">qwert</Typography>
                 <Typography variant="h6">0932093019</Typography>
                 <Typography variant="h6">Email</Typography>
                 <Typography variant="h6">Date/Time</Typography>
-                <Typography variant="h6">Type of Apponitment</Typography>
                 <Typography variant="h6">Your Doctor</Typography>
                 <Typography variant="h5">Birr 200</Typography>
               </Stack>

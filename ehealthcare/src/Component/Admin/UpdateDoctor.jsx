@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Typography, Stack, Button, TextField } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Typography, Stack, Button, TextField } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 function UpdateDoctor() {
   const [value, setValue] = useState([{}]);
+  const { id } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
     getDoctors(id);
-  }, []);
-  const id = 1;
+  }, [id]);
+
   async function getDoctors(id) {
     var response = await axios.get("http://localhost:5000/api/doctors");
     if (response.status === 200) {
@@ -44,9 +45,13 @@ function UpdateDoctor() {
       }}
     >
       <Typography variant="h3" style={{ color: "white" }} m={"20px"}>
-       Update Doctor Info
+        Update Doctor Info
       </Typography>
-      <Stack spacing={4} width={'60vh'} sx={{margin:'auto',marginBottom:'20px'}} >
+      <Stack
+        spacing={4}
+        width={"60vh"}
+        sx={{ margin: "auto", marginBottom: "20px" }}
+      >
         <form onSubmit={handleSubmit}>
           <Stack spacing={3}>
             <TextField
@@ -89,7 +94,7 @@ function UpdateDoctor() {
               onChange={handleChange}
               value={value.password}
             />
-            <Button variant="contained">update</Button>
+            <Button variant="contained" onClick={handleSubmit}>update</Button>
           </Stack>
         </form>
       </Stack>

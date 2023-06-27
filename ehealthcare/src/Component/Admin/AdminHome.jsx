@@ -1,31 +1,34 @@
-import {
-  Stack,
-  Typography,
-  Card,
-  CardMedia,
-  CardContent,
-  Button,
-} from "@mui/material";
+import { Stack, Typography, Card, CardContent, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
-// import axios from "axios";
+import axios from "axios";
 function AdminHome() {
   const [data, setData] = useState([{}]);
+  const navigate = useNavigate();
   async function getDoctors() {
-    const response = await fetch(" http://localhost:5000/api/doctors", {
+    await fetch(" http://localhost:5000/api/doctors/", {
       method: "GET",
     })
       .then((res) => res.json())
       .then((json) => setData(json.data));
-    if (response.status === 200) {
-      setData(response.data);
-    }
   }
 
   useEffect(() => {
     getDoctors();
   }, []);
+  async function handleDelete(id) {
+    if (window.confirm("Are You Sure you want to Delete?")) {
+      const response = await axios.delete(
+        `http://localhost:5000/api/doctors/${id}`
+      );
+      if (response.status === 200) {
+        alert("One Doctor Info has been deleted successfully!!!");
+        getDoctors();
+        navigate("/hospital");
+      }
+    }
+  }
   return (
     <>
       <Navbar />
@@ -52,47 +55,47 @@ function AdminHome() {
           </Button>
         </Link>
         <Stack m={"20px"}>
-          {data.map((user, index) => (
-            <Card sx={{ maxWidth: 345 }} key={index}>
-              <CardMedia
-                component="img"
-                sx={{ height: 400 }}
-                image="https://img.freepik.com/free-photo/portrait-experienced-professional-therapist-with-stethoscope-looking-camera_1098-19305.jpg?size=626&ext=jpg&ga=GA1.1.1624204321.1680518598&semt=ais"
-              />
-              <CardContent>
-                <Typography
-                  gutterBottom
-                  variant="h4"
-                  component="div"
-                  sx={{ fontWeight: "700" }}
-                >
-                  {user.name}
-                </Typography>
-                <Typography variant="h5" style={{ color: "#1B3C74" }}>
-                  {user.specialty}
-                </Typography>
-                <Typography
-                  variant="h5"
-                  style={{ color: "#2AA7FF", fontStyle: "italic" }}
-                >
-                  {user.email}
-                </Typography>
-                <Stack m={2} direction="row" spacing={3}>
-                  <Link to={`/updatedoctor/1`}>
+          {data &&
+            data.map((user, index) => (
+              <Card sx={{ maxWidth: 345 }} key={index}>
+                <CardContent>
+                  <Typography
+                    gutterBottom
+                    variant="h4"
+                    component="div"
+                    sx={{ fontWeight: "700" }}
+                  >
+                    {user.name}
+                  </Typography>
+                  <Typography variant="h5" style={{ color: "#1B3C74" }}>
+                    {user.specialty}
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    style={{ color: "#2AA7FF", fontStyle: "italic" }}
+                  >
+                    {user.email}
+                  </Typography>
+                  <Stack m={2} direction="row" spacing={3}>
+                    <Link to={`/updatedoctor/${user.id}`}>
+                      <Button variant="contained" color="info">
+                        Update
+                      </Button>
+                    </Link>
                     <Button variant="contained" color="info">
-                      Update
+                      View
                     </Button>
-                  </Link>
-                  <Button variant="contained" color="info">
-                    View
-                  </Button>
-                  <Button variant="contained" color="error">
-                    Delete
-                  </Button>
-                </Stack>
-              </CardContent>
-            </Card>
-          ))}
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={()=>handleDelete(user.id)}
+                    >
+                      Delete
+                    </Button>
+                  </Stack>
+                </CardContent>
+              </Card>
+            ))}
         </Stack>
       </Stack>
     </>

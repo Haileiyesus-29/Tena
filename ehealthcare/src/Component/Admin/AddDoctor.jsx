@@ -5,32 +5,60 @@ function AddDoctor() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [specialty, setSpecialty] = useState("");
-  const [password,setPassword] = useState("")
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+  const validatePassWord = (password) => {
+    const upperCaseRegex = /[A-Z]/;
+    const specialCharsRegex = /[-!$%^&*()_+|~=`{}[:;<>?,.@#\]]/g;
+    // /!@#$%^&*()_+-=\[\]{};':"\\|,.<>\/?/;
+    const numberRegex = /[0-9]/;
+    if (password.length < 8) {
+      return "Password must be at least 8 characters long";
+    } else if (!upperCaseRegex.test(password)) {
+      return "Password must contain at least one uppercase letter";
+    } else if (!specialCharsRegex.test(password)) {
+      return "Password must contain at least one special character";
+    } else if (!numberRegex.test(password)) {
+      return "Password must contain at least one number";
+    } else {
+      return null;
+    }
+  };
   async function handleSubmit(e) {
     e.preventDefault();
-    const response = await fetch(" http://localhost:5000/api/doctors/",{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json'
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        specialty,
-        password,
-      })
-    })
-    const data = await response.json()
-    console.log(data);
-    if (response.status === 200) {
-      alert("Doctor Added Successfully");
-      navigate("/hospital");
+    if (email && password && name && specialty) {
+      const passErr = validatePassWord(password);
+      if (validateEmail(email) && passErr === null) {
+        const response = await fetch(" http://localhost:5000/api/doctors/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // 'Authorization':
+            //   "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            specialty,
+            password,
+          }),
+        });
+        const data = await response.json();
+        console.log(data);
+        if (response.status === 200) {
+          alert("Doctor Added Successfully");
+          navigate("/hospital");
+        }
+      }
+      setError(passErr);
+    } else {
+      setError("Fields can not be empty");
     }
-
   }
-
-
   return (
     <Stack
       sx={{
@@ -56,6 +84,24 @@ function AddDoctor() {
             Add Doctor
           </Typography>
           <Stack spacing={3} m={"30px"}>
+            {error ? (
+              <Box
+                style={{
+                  background: "red",
+                  padding: "10px",
+                  borderRadius: "10px",
+                }}
+              >
+                <Typography
+                  varaint="subtitle"
+                  style={{ color: "white", fontSize: "15px" }}
+                >
+                  {error}
+                </Typography>
+              </Box>
+            ) : (
+              ""
+            )}
             <TextField
               id="outlined-name"
               label="Name of Doctor"
@@ -89,10 +135,14 @@ function AddDoctor() {
               type="password"
               margin="normal"
               variant="outlined"
-              onChange={(e) => setPassword(e.target.value )}
+              onChange={(e) => setPassword(e.target.value)}
             />
 
-            <Button variant="contained" sx={{ m: 4, p: 1.5 }} onClick={handleSubmit}>
+            <Button
+              variant="contained"
+              sx={{ m: 4, p: 1.5 }}
+              onClick={handleSubmit}
+            >
               add
             </Button>
           </Stack>
