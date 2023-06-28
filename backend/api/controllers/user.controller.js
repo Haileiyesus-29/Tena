@@ -33,12 +33,15 @@ async function createUser(req, res, next) {
 
    const token = await generateToken({ id: user._id })
    if (!token) return next({ status: 500 })
-   res.cookie('jwt', token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-   })
+   
+res.cookie('jwt', token, {
+   httpOnly: true,
+   secure: true,
+   sameSite: 'None',
+   maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+
+
    createdUser._doc.accType = 'user'
    res.status(201).json(createdUser)
 }
