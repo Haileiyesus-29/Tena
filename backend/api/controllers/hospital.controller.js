@@ -53,13 +53,11 @@ async function createHospital(req, res, next) {
    const token = await generateToken({ id: hospital._id })
    if (!token) return next({ status: 500 })
 
-   
-res.cookie('jwt', token, {
-   httpOnly: true,
-   secure: true,
-   sameSite: 'None',
-   maxAge: 7 * 24 * 60 * 60 * 1000,
-});
+   res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+   })
 
    createdHospital._doc.accType = 'hospital'
    res.status(201).json(createdHospital)

@@ -15,7 +15,22 @@ const PORT = process.env.SERVER_PORT || 5000
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors())
+app.use(
+   cors({
+      origin: 'http://localhost:3000',
+      credentials: true,
+   })
+)
+app.use((req, res, next) => {
+   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+   res.setHeader('Access-Control-Allow-Credentials', 'true')
+   res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept'
+   )
+   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+   next()
+})
 
 const userRoutes = require('./api/routes/user.route')
 const hospitalRoutes = require('./api/routes/hospital.route')
