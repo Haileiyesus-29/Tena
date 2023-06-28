@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const validateForm = require('../validations/validateForm')
 const authenticate = require('../middlewares/authenticate')
+const uploadFile = require('../middlewares/uploadFile')
 const {
    createUser,
    getUser,
@@ -24,7 +25,7 @@ router.get('/', getAllUsers)
  * @param  {string} password - The password of the user
  * @param  {string} image - The image of the user
  */
-router.post('/', validateForm, createUser)
+router.post('/', uploadFile('image'), validateForm, createUser)
 
 /**
  * @route  GET /api/users/:userId
@@ -41,7 +42,7 @@ router.get('/:userId', getUser)
  * @param  {string} image - The image of the user
  * @header  {string} Authorization - User's JWT token
  */
-router.put('/me', authenticate, updateUser)
+router.put('/me', authenticate, uploadFile('image'), updateUser)
 
 /**
  * @route  DELETE /api/users/me

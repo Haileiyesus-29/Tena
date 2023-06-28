@@ -26,7 +26,8 @@ async function getHospitalById(req, res, next) {
 
 // Create a new hospital
 async function createHospital(req, res, next) {
-   const { name, email, address, contact, password, image } = req.body
+   const { name, email, address, contact, password } = req.body
+   const image = req.file && req.file.filename
    const errors = []
    if (!address) errors.push('address is required')
    if (!contact) errors.push('contact is required')
@@ -58,13 +59,14 @@ async function createHospital(req, res, next) {
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
    })
-   res.status(201).json({ hospital: createdHospital })
+   createdHospital._doc.accType = 'hospital'
+   res.status(201).json(createdHospital)
 }
 
 // Update a hospital by ID
 async function updateHospital(req, res, next) {
-   const { name, password, address, contact, image } = req.body
-
+   const { name, password, address, contact } = req.body
+   const image = req.file && req.file.filename
    const update = { image }
    let nameErrors = []
    let passwordErrors = []
@@ -76,7 +78,6 @@ async function updateHospital(req, res, next) {
    if (name) {
       nameErrors = nameValidator(name)
       update.name = name
-
    }
    if (name) update.name = name
    if (address) update.address = address
@@ -87,6 +88,8 @@ async function updateHospital(req, res, next) {
 
    const hospital = await Hospital.findByIdAndUpdate(req.userId, update)
    if (!hospital) return next({ status: 500 })
+   hospital.password = undefined
+
    res.status(201).json({ hospital })
 }
 

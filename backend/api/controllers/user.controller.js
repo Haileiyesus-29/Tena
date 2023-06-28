@@ -17,7 +17,8 @@ async function getAllUsers(req, res, next) {
 
 // Create a new user
 async function createUser(req, res, next) {
-   const { name, email, password, image } = req.body
+   const { name, email, password } = req.body
+   const image = req.file && req.file.filename
    const hashedPassword = await hashPassword(password)
    if (!hashedPassword) return next({ status: 500 })
    const user = new User({
@@ -38,10 +39,8 @@ async function createUser(req, res, next) {
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
    })
-   res.status(201).json({
-      message: 'User created successfully',
-      account: createdUser,
-   })
+   createdUser._doc.accType = 'user'
+   res.status(201).json(createdUser)
 }
 
 // Get user details
@@ -55,8 +54,8 @@ async function getUser(req, res, next) {
 
 // Update user information
 async function updateUser(req, res, next) {
-   const { name, password, image } = req.body
-   const update = { image }
+   const { name, password } = req.body
+   const update = {}
    let nameErrors = []
    let passwordErrors = []
 
@@ -71,6 +70,10 @@ async function updateUser(req, res, next) {
 
    const errors = [...nameErrors, ...passwordErrors]
    if (errors.length > 0) return next({ errors, status: 400 })
+
+   if (req.file) {
+      update.image = req.file.filename
+   }
 
    const updatedUser = await User.findByIdAndUpdate(req.userId, update, {
       new: true,

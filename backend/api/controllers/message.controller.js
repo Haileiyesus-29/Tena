@@ -49,10 +49,11 @@ const createMessage = async (req, res, next) => {
    const receiver = await User.findById(req.params.receiverId)
    if (!receiver)
       return next({ status: 404, errors: ['message receiver not found'] })
-
+   const media = req.file && req.file.filename
    const message = new Message({
       sender: req.userId,
       receiver,
+      media,
       content: req.body.content,
    })
    await message.save()

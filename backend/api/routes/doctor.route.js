@@ -1,9 +1,8 @@
-
 const express = require('express')
 const router = express.Router()
 const validateForm = require('../validations/validateForm')
 const authenticate = require('../middlewares/authenticate')
-
+const uploadFile = require('../middlewares/uploadFile')
 const {
    getAllDoctors,
    getDoctorById,
@@ -38,7 +37,7 @@ router.get('/:id', getDoctorById)
  * @header  {string} Authorization - Hospital's JWT token
  * @returns {object} - The created doctor and token
  */
-router.post('/', validateForm, authenticate, createDoctor)
+router.post('/', uploadFile('image'), validateForm, authenticate, createDoctor)
 
 /**
  * @route  PUT /api/doctors/me
@@ -49,7 +48,7 @@ router.post('/', validateForm, authenticate, createDoctor)
  * @header  {string} Authorization - Doctors's JWT token
  * @returns {object} - Success message indicating the update was successful
  */
-router.put('/me', authenticate, updateDoctor)
+router.put('/me', authenticate, uploadFile('image'), updateDoctor)
 
 /**
  * @route  DELETE /api/doctors/:id
@@ -68,4 +67,4 @@ router.delete('/:id', authenticate, deleteDoctorById)
  */
 router.delete('/me', authenticate, deleteDoctor)
 
-module.exports = router;
+module.exports = router

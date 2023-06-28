@@ -34,6 +34,7 @@ async function createDoctor(req, res, next) {
 
    const hashedPassword = await hashPassword(password)
    if (!hashedPassword) return next({ status: 500 })
+   const image = req.file && req.file.filename
 
    const doctor = new Doctor({
       name,
@@ -41,17 +42,21 @@ async function createDoctor(req, res, next) {
       speciality,
       password: hashedPassword,
       hospital: req.userId,
+      image,
    })
    const createdDoctor = await doctor.save()
    if (!createdDoctor) return next({ status: 500 })
    const token = await generateToken({ id: doctor._id })
+   createdDoctor.password = undefined
+
    res.cookie('jwt', token, {
       httpOnly: true,
       secure: false,
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
    })
-   res.status(201).json({ doctor: createdDoctor })
+   createdDoctor._doc.accType = 'doctor'
+   res.status(201).json(createdDoctor)
 }
 
 // Update a doctor by ID

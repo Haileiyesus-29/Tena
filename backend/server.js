@@ -2,6 +2,8 @@ require('dotenv').config()
 require('express-async-errors')
 const express = require('express')
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
+
 const connectDB = require('./config/db')
 const {
    errorHandler,
@@ -13,6 +15,7 @@ const PORT = process.env.SERVER_PORT || 5000
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(cors())
 
 const userRoutes = require('./api/routes/user.route')
 const hospitalRoutes = require('./api/routes/hospital.route')

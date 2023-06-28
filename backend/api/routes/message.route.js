@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const authenticate = require('../middlewares/authenticate')
+const uploadFile = require('../middlewares/uploadFile')
 const {
    getAllMessages,
    createMessage,
@@ -28,8 +29,15 @@ router.get('/', authenticate, getAllMessages)
  * @description Create a new message
  * @param  {string} receiverId - The ID of the message receiver
  * @param  {string} content - The content of the message
+ * @param  {file} file - The image or video file (optional)
  * @header  {string} Authorization - User's JWT token
  */
-router.post('/:receiverId', authenticate, validateMessage, createMessage)
+router.post(
+   '/:receiverId',
+   authenticate,
+   validateMessage,
+   uploadFile(['image', 'video']),
+   createMessage
+)
 
 module.exports = router

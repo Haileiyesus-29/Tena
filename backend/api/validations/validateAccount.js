@@ -25,7 +25,8 @@ async function validateAccount(req, res, next) {
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
    })
-   res.status(200).json({ account, accType })
+   account._doc.accType = accType
+   res.status(200).json(account)
 }
 
 module.exports = validateAccount
