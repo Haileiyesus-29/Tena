@@ -89,8 +89,8 @@ async function updateHospital(req, res, next) {
    const hospital = await Hospital.findByIdAndUpdate(req.userId, update)
    if (!hospital) return next({ status: 500 })
    hospital.password = undefined
-
-   res.status(201).json({ hospital })
+   hospital._doc.accType = 'hospital'
+   res.status(201).json(hospital)
 }
 
 // Delete a hospital by ID

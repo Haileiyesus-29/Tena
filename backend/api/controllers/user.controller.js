@@ -80,7 +80,8 @@ async function updateUser(req, res, next) {
    }).select('-password')
    if (!updatedUser) return next({ status: 500 })
    updatedUser.password = undefined
-   res.status(201).json({ message: 'Update successful', user: updatedUser })
+   updatedUser._doc.accType = 'user'
+   res.status(201).json(updatedUser)
 }
 
 // Delete a user

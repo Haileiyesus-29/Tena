@@ -84,8 +84,8 @@ async function updateDoctor(req, res, next) {
    const doctor = await Doctor.findByIdAndUpdate(req.userId, update)
    if (!doctor) return next({ status: 404, errors: ['account does not exist'] })
    doctor.password = undefined
-
-   res.status(201).json({ message: 'update successful', account: doctor })
+   doctor._doc.accType = 'doctor'
+   res.status(201).json(doctor)
 }
 
 // Delete own doctor account
