@@ -50,11 +50,12 @@ async function createDoctor(req, res, next) {
    createdDoctor.password = undefined
 
    res.cookie('jwt', token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-   })
+   httpOnly: true,
+   secure: true,
+   sameSite: 'None',
+   maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+
    createdDoctor._doc.accType = 'doctor'
    res.status(201).json(createdDoctor)
 }
