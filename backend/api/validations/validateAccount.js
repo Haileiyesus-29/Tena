@@ -20,11 +20,12 @@ async function validateAccount(req, res, next) {
 
    const token = await generateToken({ id: account._id })
    res.cookie('jwt', token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-   })
+     httpOnly: true,
+     secure: true,
+     sameSite: 'None',
+     maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
    account._doc.accType = accType
    res.status(200).json(account)
 }
