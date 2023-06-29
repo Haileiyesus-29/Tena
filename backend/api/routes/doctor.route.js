@@ -17,7 +17,7 @@ const {
  * @description Get all doctors
  * @returns {array} - An array of doctors
  */
-router.get('/', authenticate, getAllDoctors)
+router.get('/hospital/:hospitalId', getAllDoctors)
 
 /**
  * @route  GET /api/doctors/:id

@@ -19,7 +19,7 @@ function errorHandler(err, req, res, next) {
 }
 
 function internalErrorsHanlder(err, req, res, next) {
-   console.log(err)
+   console.trace(err)
    if (err.name === 'CastError')
       return res
          .status(400)

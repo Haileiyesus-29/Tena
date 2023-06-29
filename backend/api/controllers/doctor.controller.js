@@ -4,13 +4,20 @@ const hashPassword = require('../helpers/hashPassword')
 const generateToken = require('../helpers/generateToken')
 const passwordValidator = require('../helpers/passwordValidator')
 const nameValidator = require('../helpers/nameValidator')
+const findAccount = require('../helpers/findAccount')
 
 // Get all doctors
 async function getAllDoctors(req, res, next) {
    const skip = req.query?.skip || 0
    const limit = req.query?.limit || 10
+
+   const hospitalId = req.params?.hospitalId
+   const { account } = await findAccount({ _id: hospitalId })
+   if (!account)
+      return next({ status: 404, errors: ['hospital does not exist '] })
+
    const doctors = await Doctor.find({
-      hospital: req.userId,
+      hospital: hospitalId,
    })
       .select('-password')
       .skip(skip)
@@ -21,9 +28,14 @@ async function getAllDoctors(req, res, next) {
 // Get a single doctor by ID
 async function getDoctorById(req, res, next) {
    const { id } = req.params
-   const doctor = await Doctor.findById(id).select('-password')
-   if (!doctor) return next({ status: 404, errors: ['account does not exist'] })
-   res.status(200).json(doctor)
+   try {
+      const doctor = await Doctor.findById(id).select('-password')
+      if (!doctor)
+         return next({ status: 404, errors: ['account does not exist'] })
+      res.status(200).json(doctor)
+   } catch {
+      return next({ status: 400, errors: ['invalid id'] })
+   }
 }
 
 // Create a new doctor

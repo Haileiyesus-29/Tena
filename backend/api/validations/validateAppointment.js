@@ -17,7 +17,7 @@ const validateAppointment = async (req, res, next) => {
    // Check if the date and time are not behind the current date and time
    const appointmentDateTime = new Date(`${date}T${time}`)
    if (isNaN(appointmentDateTime) || appointmentDateTime < new Date())
-      return next({ status: 400, errors: ['invalid date and time'] })
+      return next({ status: 400, errors: ['can not make appointment behind '] })
 
    // Check if the appointment time is between 8:00 a.m. and 5:00 p.m.
    const startTime = new Date(`${date}T08:00`)

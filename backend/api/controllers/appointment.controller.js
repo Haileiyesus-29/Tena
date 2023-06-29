@@ -24,17 +24,19 @@ const createAppointment = async (req, res, next) => {
 const getAllAppointments = async (req, res, next) => {
    const appointments = await Appointment.find({
       [req.accType]: req.userId,
-   }).populate('doctor user hospital', 'name')
+   }).populate('doctor user hospital', 'name _id address')
 
    const formattedAppointments = appointments.map(appointment => {
       return {
          id: appointment._id,
          date: appointment.date,
          time: appointment.time,
-         status: appointment.status,
-         user_name: appointment?.user?.name,
-         doctor_name: appointment?.doctor?.name,
-         hospital_name: appointment?.hospital?.name,
+         user: appointment?.user?.name,
+         userId: appointment?.user?._id,
+         doctor: appointment?.doctor?.name,
+         doctorId: appointment?.doctor?._id,
+         hospital: appointment?.hospital?.name,
+         address: appointment?.hospital?.address,
       }
    })
 
