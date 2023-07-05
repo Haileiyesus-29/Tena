@@ -49,7 +49,8 @@ async function getUser(req, res, next) {
    const userId = req.params.userId
    const user = await User.findById(userId).select('email name image')
 
-   if (!user) return next({ status: 404, errors: ['user does not exist'] })
+   if (!user) return next({ status: 404, errors: ['account does not exist'] })
+   user._doc.accType = 'user'
    res.status(200).json(user)
 }
 
